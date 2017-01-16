@@ -58,4 +58,20 @@ public class BoardTest {
 		board.setField(3, 0, 2, Mark.O);
 		assertTrue(board.hasRowColumn(Mark.O));
 	}
+	@Test
+	public void testHasRowHeight() {
+		board.setField(1, 2, 1, Mark.O);
+		board.setField(2, 2, 2, Mark.O);
+		board.setField(3, 2, 3, Mark.O);
+		assertFalse(board.hasRowHeight(Mark.O));
+		board.setField(0, 2, 0, Mark.O);
+		assertTrue(board.hasRowHeight(Mark.O));
+		board.reset();
+		board.setField(0, 3, 3, Mark.O);
+		board.setField(1, 3, 2, Mark.O);
+		board.setField(2, 3, 1, Mark.O);
+		assertFalse(board.hasRowHeight(Mark.O));
+		board.setField(3, 3, 0, Mark.O);
+		assertTrue(board.hasRowHeight(Mark.O));
+	}
 }
