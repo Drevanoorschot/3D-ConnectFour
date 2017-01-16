@@ -122,4 +122,30 @@ public class Board {
 		}
 		return false;
 	}
+	public boolean hasRowHeight(Mark m) {
+		boolean fullRowHeight;
+		for (int row = 0; row < DIM; row++) {
+			fullRowHeight = true;
+			for (int rh = 0; rh < DIM; rh++) {
+				if (fields[rh][row][rh] != m) {
+					fullRowHeight = false;
+				}
+			}
+			if (fullRowHeight) {
+				return true;
+			}
+		}
+		for (int row = 0; row < DIM; row++) {
+			fullRowHeight = true;
+			for (int rh = 0; rh < DIM; rh++) {
+				if (fields[rh][row][DIM - rh - 1] != m) {
+					fullRowHeight = false;
+				}
+			}
+			if (fullRowHeight) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
