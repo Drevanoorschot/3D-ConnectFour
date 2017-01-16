@@ -1,4 +1,4 @@
-package connect4.controller;
+package controller;
 
 public interface Strategy {
 

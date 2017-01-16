@@ -1,4 +1,4 @@
-package connect4.model;
+package model;
 
 public enum Mark {
 	X, O, EMPTY;

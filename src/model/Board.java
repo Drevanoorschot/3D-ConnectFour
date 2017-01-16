@@ -1,4 +1,4 @@
-package connect4.model;
+package model;
 
 public class Board {
 	
