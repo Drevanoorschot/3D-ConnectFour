@@ -1,31 +1,125 @@
 package model;
 
 public class Board {
-	private Mark[][][] boardArray = new Mark[3][3][3];
-	private Mark m;
+	private static final int DIM = 4;
+	private Mark[][][] fields;
+
 	public Board() {
+		fields = new Mark[DIM][DIM][DIM];
 		reset();
 	}
-	
+
 	public Board deepCopy() {
 		Board copy = new Board();
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				for (int z = 0; z < 3; z++) {
-					copy.boardArray[x][y][z] = this.boardArray[x][y][z];
+		for (int col = 0; col < DIM; col++) {
+			for (int row = 0; row < DIM; row++) {
+				for (int height = 0; height < DIM; height++) {
+					copy.fields[col][row][height] = this.fields[col][row][height];
 				}
 			}
 		}
 		return copy;
 	}
-	
+
 	public void reset() {
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				for (int z = 0; z < 3; z++) {
-					boardArray[x][y][z] = m.EMPTY;
+		for (int col = 0; col < DIM; col++) {
+			for (int row = 0; row < DIM; row++) {
+				for (int height = 0; height < DIM; height++) {
+					fields[col][row][height] = Mark.EMPTY;
 				}
 			}
 		}
+	}
+
+	public void setField(int col, int row, int height, Mark m) {
+		fields[col][row][height] = m;
+	}
+
+	public Mark getField(int col, int row, int height) {
+		return fields[col][row][height];
+	}
+
+	public boolean hasRow(Mark m) {
+		boolean fullRow;
+		for (int row = 0; row < DIM; row++) {
+			for (int height = 0; height < DIM; height++) {
+				fullRow = true;
+				for (int col = 0; col < DIM; col++) {
+					if (fields[col][row][height] != m) {
+						fullRow = false;
+					}
+				}
+				if (fullRow) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+
+	}
+	
+	public boolean hasColumn(Mark m) {
+		boolean fullCol;
+		for (int col = 0; col < DIM; col++) {
+			for (int height = 0; height < DIM; height++) {
+				fullCol = true;
+				for (int row = 0; row < DIM; row++) {
+					if (fields[col][row][height] != m) {
+						fullCol = false;
+					}
+				}
+				if (fullCol) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+	}
+	public boolean hasHeight(Mark m) {
+		boolean fullHeight;
+		for (int row = 0; row < DIM; row++) {
+			for (int col = 0; col < DIM; col++) {
+				fullHeight = true;
+				for (int height = 0; height < DIM; height++) {
+					if (fields[col][row][height] != m) {
+						fullHeight = false;
+					}
+				}
+				if (fullHeight) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasRowColumn(Mark m) {
+		boolean fullRowColumn;
+		for (int height = 0; height < DIM; height++) {
+			fullRowColumn = true;
+			for (int rc = 0; rc < DIM; rc++) {
+				if (fields[rc][rc][height] != m) {
+					fullRowColumn = false;
+				}
+			}
+			if (fullRowColumn) {
+				return true;
+			}
+		}
+		for (int height = 0; height < DIM; height++) {
+			fullRowColumn = true;
+			for (int rc = 0; rc < DIM; rc++) {
+				if (fields[rc][DIM - rc - 1][height] != m) {
+					fullRowColumn = false;
+				}
+			}
+			if (fullRowColumn) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
