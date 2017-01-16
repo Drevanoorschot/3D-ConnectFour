@@ -1,6 +1,7 @@
 package model;
 
 public enum Mark {
+
 	X, O, EMPTY;
 	public Mark next(Mark m) {
 		switch(m) {
