@@ -11,7 +11,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public int[] makeMove() {
+	public int[] determineMove() {
 		int[] coord = new int[3];
 		System.out.println(getName() + ", your turn!");
 		Scanner in = new Scanner(System.in);	
@@ -22,7 +22,7 @@ public class HumanPlayer extends Player {
 			try {
 				String input = in.nextLine();
 				coord[0] = Integer.parseInt(input);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				System.out.println("Invalid input, please provide a valid column number\n");
 				coord[0] = -1;
 			}
@@ -34,7 +34,7 @@ public class HumanPlayer extends Player {
 			try {
 				String input = in.nextLine();
 				coord[1] = Integer.parseInt(input);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				System.out.println("Invalid input, please provide a valid row number\n");
 				coord[1] = -1;
 			}
@@ -46,7 +46,7 @@ public class HumanPlayer extends Player {
 			try {
 				String input = in.nextLine();
 				coord[2] = Integer.parseInt(input);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				System.out.println("Invalid input, please provide a valid column number\n");
 				coord[2] = -1;
 			}

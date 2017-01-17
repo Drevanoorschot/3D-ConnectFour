@@ -228,6 +228,7 @@ public class Board {
 	}
 
 	public boolean isWinner(Mark m) {
-		return hasRow(m) || hasColumn(m) || hasHeight(m) || hasRowHeight(m) || hasRowColumn(m) || hasColumnHeight(m) || hasRowColumnHeight(m);
+		return hasRow(m) || hasColumn(m) || hasHeight(m) || hasRowHeight(m) 
+				|| hasRowColumn(m) || hasColumnHeight(m) || hasRowColumnHeight(m);
 	}
 }
