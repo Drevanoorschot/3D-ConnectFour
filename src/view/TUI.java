@@ -13,11 +13,7 @@ public class TUI {
 		board = b;
 		graphicBoard = 	"     layer 1                 layer 2    \n"
 				+      	"+---+---+---+---+	+---+---+---+---+\n"
-<<<<<<< HEAD
-				+ 	 	"| " + Mark.X + " |   |   |   |  |   |   |   |   |\n"
-=======
-				+ 	 	"|   |   |   |   |       |   |   |   |   |\n"
->>>>>>> branch 'master' of https://github.com/Drevanoorschot/3D-ConnectFour.git
+
 				+	    "+---+---+---+---+	+---+---+---+---+\n"
 				+ 	    "|   |   |   |   |       |   |   |   |   |\n"
 				+	    "+---+---+---+---+	+---+---+---+---+\n"
