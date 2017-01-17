@@ -148,4 +148,77 @@ public class Board {
 		}
 		return false;
 	}
+	public boolean hasColumnHeight(Mark m) {
+		boolean fullColumnHeight;
+		for (int col = 0; col < DIM; col++) {
+			fullColumnHeight = true;
+			for (int ch = 0; ch < DIM; ch++) {
+				if (fields[col][ch][ch] != m) {
+					fullColumnHeight = false;
+				}
+			}
+			if (fullColumnHeight) {
+				return true;
+			}
+		}
+		for (int col = 0; col < DIM; col++) {
+			fullColumnHeight = true;
+			for (int ch = 0; ch < DIM; ch++) {
+				if (fields[col][ch][DIM - ch - 1] != m) {
+					fullColumnHeight = false;
+				}
+			}
+			if (fullColumnHeight) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean hasRowColumnHeight(Mark m) {
+		//booleans indicate start of diagonal in bottom level
+		boolean diagTopLeft     = true;
+		boolean diagTopRight    = true;
+		boolean diagBottomLeft  = true;
+		boolean diagBottomRight = true;
+		for (int rch = 0; rch < DIM; rch++) {
+			if (fields[rch][rch][rch] != m) {
+				diagTopLeft = false;
+			}
+			if (fields[DIM - rch - 1][rch][rch] != m) {
+				diagTopRight = false;
+			}
+			if (fields[rch][DIM - rch - 1][rch] != m) {
+				diagBottomLeft = false;
+			}
+			if (fields[DIM - rch - 1][DIM - rch - 1][rch] != m) {
+				diagBottomRight = false;
+			}
+		}
+		return diagTopLeft | diagTopRight | diagBottomLeft | diagBottomRight; 
+	}
+	
+	public boolean isFull() {
+		boolean full = true;
+		for (int row = 0; row < DIM; row++) {
+			for (int col = 0; col < DIM; col++) {
+				for (int height = 0; height < DIM; height++) {
+					if (fields[col][row][height] == Mark.EMPTY) {
+						full = false;
+					}
+				}
+			}
+		}
+		return full;
+	}
+	public boolean gameOver() {
+		return isFull() | hasWinner();
+	}
+	public boolean hasWinner() {
+		return isWinner(Mark.O) | isWinner(Mark.X);
+	}
+	public boolean isWinner(Mark m) {
+		return hasRow(m) | hasColumn(m) | hasHeight(m) | 
+				hasRowHeight(m) | hasRowColumn(m) | hasColumnHeight(m) | 
+				hasRowColumnHeight(m);
+	}
 }
