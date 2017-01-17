@@ -8,7 +8,7 @@ public class Board {
 		fields = new Mark[DIM][DIM][DIM];
 		reset();
 	}
-	
+
 	public int getDIM() {
 		return DIM;
 	}
@@ -24,7 +24,7 @@ public class Board {
 		}
 		return copy;
 	}
-	
+
 	public void reset() {
 		for (int col = 0; col < DIM; col++) {
 			for (int row = 0; row < DIM; row++) {
@@ -202,6 +202,7 @@ public class Board {
 				diagBottomRight = false;
 			}
 		}
+
 		return diagTopLeft || diagTopRight || diagBottomLeft || diagBottomRight;
 	}
 
@@ -228,7 +229,8 @@ public class Board {
 	}
 
 	public boolean isWinner(Mark m) {
-		return hasRow(m) || hasColumn(m) || hasHeight(m) || hasRowHeight(m) 
-				|| hasRowColumn(m) || hasColumnHeight(m) || hasRowColumnHeight(m);
+		return hasRow(m) || hasColumn(m) || hasHeight(m) || hasRowHeight(m) || hasRowColumn(m) || hasColumnHeight(m)
+				|| hasRowColumnHeight(m);
+
 	}
 }
