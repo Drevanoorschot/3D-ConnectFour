@@ -7,6 +7,7 @@ public class TUI {
 	private String graphicBoard;
 	private Board board;
 	
+
 	public TUI(Board b) {
 		Mark m = Mark.EMPTY;
 		board = b;
