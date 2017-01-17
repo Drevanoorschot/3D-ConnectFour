@@ -20,7 +20,7 @@ public class TUI {
 		int h = 0;
 		int c = 0;
 		graphicBoard = "";
-		graphicBoard = graphicBoard + "     layer 1             layer 2    \n";
+		graphicBoard = graphicBoard + "     layer 0             layer 1    \n";
 		for(int j = 0; j < board.getDIM(); j++) {
 		for(int i = 0; i < board.getDIM(); i++) {
 			graphicBoard = graphicBoard + "+---";
@@ -52,7 +52,8 @@ public class TUI {
 		}
 		graphicBoard = graphicBoard + "+\n";
 		graphicBoard = graphicBoard + "\n";
-		graphicBoard = graphicBoard + "     layer 3             layer 4    \n";
+		h = 2;
+		graphicBoard = graphicBoard + "     layer 2             layer 3   \n";
 		for(int j = 0; j < board.getDIM(); j++) {
 		for(int i = 0; i < board.getDIM(); i++) {
 			graphicBoard = graphicBoard + "+---";
@@ -94,6 +95,7 @@ public class TUI {
 			} else if(board.getField(col, row, height) == Mark.X) {
 				return cross;
 				}
+		
 		return empty;
 		}
 	}
