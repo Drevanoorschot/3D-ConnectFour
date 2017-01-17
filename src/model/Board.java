@@ -58,7 +58,7 @@ public class Board {
 		return false;
 
 	}
-	
+
 	public boolean hasColumn(Mark m) {
 		boolean fullCol;
 		for (int col = 0; col < DIM; col++) {
@@ -77,6 +77,7 @@ public class Board {
 		}
 		return false;
 	}
+
 	public boolean hasHeight(Mark m) {
 		boolean fullHeight;
 		for (int row = 0; row < DIM; row++) {
@@ -95,7 +96,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	public boolean hasRowColumn(Mark m) {
 		boolean fullRowColumn;
 		for (int height = 0; height < DIM; height++) {
@@ -122,6 +123,7 @@ public class Board {
 		}
 		return false;
 	}
+
 	public boolean hasRowHeight(Mark m) {
 		boolean fullRowHeight;
 		for (int row = 0; row < DIM; row++) {
@@ -148,6 +150,7 @@ public class Board {
 		}
 		return false;
 	}
+
 	public boolean hasColumnHeight(Mark m) {
 		boolean fullColumnHeight;
 		for (int col = 0; col < DIM; col++) {
@@ -174,11 +177,12 @@ public class Board {
 		}
 		return false;
 	}
+
 	public boolean hasRowColumnHeight(Mark m) {
-		//booleans indicate start of diagonal in bottom level
-		boolean diagTopLeft     = true;
-		boolean diagTopRight    = true;
-		boolean diagBottomLeft  = true;
+		// booleans indicate start of diagonal in bottom level
+		boolean diagTopLeft = true;
+		boolean diagTopRight = true;
+		boolean diagBottomLeft = true;
 		boolean diagBottomRight = true;
 		for (int rch = 0; rch < DIM; rch++) {
 			if (fields[rch][rch][rch] != m) {
@@ -194,9 +198,9 @@ public class Board {
 				diagBottomRight = false;
 			}
 		}
-		return diagTopLeft | diagTopRight | diagBottomLeft | diagBottomRight; 
+		return diagTopLeft | diagTopRight | diagBottomLeft | diagBottomRight;
 	}
-	
+
 	public boolean isFull() {
 		boolean full = true;
 		for (int row = 0; row < DIM; row++) {
@@ -210,15 +214,16 @@ public class Board {
 		}
 		return full;
 	}
+
 	public boolean gameOver() {
 		return isFull() | hasWinner();
 	}
+
 	public boolean hasWinner() {
 		return isWinner(Mark.O) | isWinner(Mark.X);
 	}
+
 	public boolean isWinner(Mark m) {
-		return hasRow(m) | hasColumn(m) | hasHeight(m) | 
-				hasRowHeight(m) | hasRowColumn(m) | hasColumnHeight(m) | 
-				hasRowColumnHeight(m);
+		return hasRow(m) | hasColumn(m) | hasHeight(m) | hasRowHeight(m) | hasRowColumn(m) | hasColumnHeight(m) | hasRowColumnHeight(m);
 	}
 }
