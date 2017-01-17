@@ -12,6 +12,7 @@ public class TUI {
 	public TUI(Board b) {
 		Mark m = Mark.EMPTY;
 		board = b;
+
 		graphicBoard = boardToString();
 	}
 	
