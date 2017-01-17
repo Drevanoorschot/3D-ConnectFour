@@ -30,13 +30,13 @@ public class TUI {
 			graphicBoard = graphicBoard + "+---";
 		}
 		graphicBoard = graphicBoard + "+\n";
-		for(int i = 0; i < board.getDIM(); i++) {
-			graphicBoard = graphicBoard + "|" + this.fieldToString(c, i, h);
+		for(int r = 0; r < board.getDIM(); r++) {
+			graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 		}
 		h++;
 		graphicBoard = graphicBoard + "|  ";
-		for(int i = 0; i < board.getDIM(); i++) {
-			graphicBoard = graphicBoard + "|" + this.fieldToString(c, i, h);
+		for(int r = 0; r < board.getDIM(); r++) {
+			graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 		}
 		h--;
 		graphicBoard = graphicBoard + "|\n";
@@ -63,13 +63,13 @@ public class TUI {
 			graphicBoard = graphicBoard + "+---";
 		}
 		graphicBoard = graphicBoard + "+\n";
-		for(int i = 0; i < board.getDIM(); i++) {
-			graphicBoard = graphicBoard + "|" + this.fieldToString(c, i, h);
+		for(int r = 0; r < board.getDIM(); r++) {
+			graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 		}
 		h++;
 		graphicBoard = graphicBoard + "|  ";
-		for(int i = 0; i < board.getDIM(); i++) {
-			graphicBoard = graphicBoard + "|" + this.fieldToString(c, i, h);
+		for(int r = 0; r < board.getDIM(); r++) {
+			graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 		}
 		h--;
 		graphicBoard = graphicBoard + "|\n";
