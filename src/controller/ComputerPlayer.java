@@ -17,8 +17,11 @@ public class ComputerPlayer extends Player {
 	
 	@Override
 	public int[] determineMove() {
-		// TODO Auto-generated method stub
-		return strat.determineMove(Board b, mark);
+		return null;
+	}
+	
+	public Strategy getStrategy() {
+		return strat;
 	}
 
 }

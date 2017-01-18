@@ -21,6 +21,12 @@ public class Game {
 		board = new Board();
 		tui = new TUI(board);
 		board.addObserver(tui);
+		if (p1 instanceof ComputerPlayer) {
+			board.addObserver(((ComputerPlayer) p1).getStrategy());
+		}
+		if (p2 instanceof ComputerPlayer) {
+			board.addObserver(((ComputerPlayer) p2).getStrategy());
+		}
 		turn = 0;
 		playerAmount = 2;
 	}
@@ -33,9 +39,7 @@ public class Game {
 				try {
 					moveMade = true;
 					makeMove(this.detemineTurn());
-				} catch (IndexOutOfBoundsException | 
-						FieldNotFreeException | 
-						FieldBelowNotTakenException e) {
+				} catch (IndexOutOfBoundsException | FieldNotFreeException | FieldBelowNotTakenException e) {
 					System.out.println(e.getMessage());
 					moveMade = false;
 				}
@@ -58,9 +62,8 @@ public class Game {
 		if (coords[2] != 0 && board.getField(coords[0], coords[1], coords[2] - 1) == Mark.EMPTY) {
 			throw new FieldBelowNotTakenException();
 		}
-		if (coords[0] >= dim || coords[0] < 0 
-				|| coords[1] >= dim || coords[1] < 0 
-				|| coords[2] >= dim || coords[2] < 0) {
+		if (coords[0] >= dim || coords[0] < 0 || coords[1] >= dim || coords[1] < 0 || coords[2] >= dim
+				|| coords[2] < 0) {
 			throw new IndexOutOfBoundsException("Field does not exist!");
 		}
 		board.setField(coords[0], coords[1], coords[2], player.getMark());
@@ -75,7 +78,7 @@ public class Game {
 			return player2;
 		}
 	}
-	
+
 	public Player getWinner() throws HasNoWinnerException {
 		if (board.isWinner(player1.getMark())) {
 			return player1;

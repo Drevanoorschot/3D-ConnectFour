@@ -5,11 +5,6 @@ import java.util.Scanner;
 import model.Mark;
 
 public class HumanPlayer extends Player {
-	public static void main(String[] args) {
-		Player p = new HumanPlayer(Mark.O, "dude");
-		int[] test = p.determineMove();
-		System.out.println(test[0] + test[1] + test[2]);
-	}	
 	public HumanPlayer(Mark m, String n) {
 		super(m, n);
 	}
@@ -30,7 +25,7 @@ public class HumanPlayer extends Player {
 				coord[0] = -1;
 			}
 		}
-		
+
 		System.out.println("Please enter a row number (starting at 0)");
 		coord[1] = -1;
 		while (coord[1] < 0) {
@@ -42,7 +37,7 @@ public class HumanPlayer extends Player {
 				coord[1] = -1;
 			}
 		}
-		
+
 		System.out.println("Please enter a height number (starting at 0)");
 		coord[2] = -1;
 		while (coord[2] < 0) {
@@ -54,7 +49,7 @@ public class HumanPlayer extends Player {
 				coord[2] = -1;
 			}
 		}
-		//in.close();
+		// in.close();
 		return coord;
 	}
 
