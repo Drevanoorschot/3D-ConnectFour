@@ -240,4 +240,5 @@ public class Board extends Observable {
 				|| hasRowColumnHeight(m);
 
 	}
+	
 }
