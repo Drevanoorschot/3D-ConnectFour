@@ -21,7 +21,7 @@ public class TUI implements Observer {
 
 	public String boardToString(Board brd) {
 		int h = 0;
-		int c = 0;
+		int r = 0;
 		graphicBoard = "";
 		graphicBoard = graphicBoard + "     layer 0             layer 1    \n";
 		for (int j = 0; j < brd.getDIM(); j++) {
@@ -33,18 +33,18 @@ public class TUI implements Observer {
 				graphicBoard = graphicBoard + "+---";
 			}
 			graphicBoard = graphicBoard + "+\n";
-			for (int r = 0; r < brd.getDIM(); r++) {
+			for (int c = 0; c < brd.getDIM(); c++) {
 				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 			}
 			h++;
 			graphicBoard = graphicBoard + "|  ";
-			for (int r = 0; r < brd.getDIM(); r++) {
+			for (int c = 0; c < brd.getDIM(); c++) {
 				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 			}
 			h--;
 			graphicBoard = graphicBoard + "|\n";
-			c++;
-			c = c % brd.getDIM();
+			r++;
+			r = r % brd.getDIM();
 		}
 		for (int i = 0; i < brd.getDIM(); i++) {
 			graphicBoard = graphicBoard + "+---";
@@ -66,18 +66,18 @@ public class TUI implements Observer {
 				graphicBoard = graphicBoard + "+---";
 			}
 			graphicBoard = graphicBoard + "+\n";
-			for (int r = 0; r < brd.getDIM(); r++) {
+			for (int c = 0; c < brd.getDIM(); c++) {
 				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 			}
 			h++;
 			graphicBoard = graphicBoard + "|  ";
-			for (int r = 0; r < brd.getDIM(); r++) {
+			for (int c = 0; c < brd.getDIM(); c++) {
 				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
 			}
 			h--;
 			graphicBoard = graphicBoard + "|\n";
-			c++;
-			c = c % brd.getDIM();
+			r++;
+			r = r % brd.getDIM();
 		}
 		for (int i = 0; i < brd.getDIM(); i++) {
 			graphicBoard = graphicBoard + "+---";
