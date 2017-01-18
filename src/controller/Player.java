@@ -10,6 +10,11 @@ public abstract class Player {
 		mark = m;
 		name = n;
 	}
+	
+	public Player(Mark m, Strategy strat) {
+		mark = m;
+		name = strat.getName();
+	}
 
 	public Mark getMark() {
 		return mark;
