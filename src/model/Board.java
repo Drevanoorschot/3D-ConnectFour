@@ -1,6 +1,8 @@
 package model;
 
-public class Board {
+import java.util.Observable;
+
+public class Board extends Observable {
 	private static final int DIM = 4;
 	private Mark[][][] fields;
 
@@ -33,10 +35,14 @@ public class Board {
 				}
 			}
 		}
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public void setField(int col, int row, int height, Mark m) {
 		fields[col][row][height] = m;
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public Mark getField(int col, int row, int height) {
@@ -229,7 +235,8 @@ public class Board {
 	}
 
 	public boolean isWinner(Mark m) {
-		return hasRow(m) || hasColumn(m) || hasHeight(m) || hasRowHeight(m) || hasRowColumn(m) || hasColumnHeight(m)
+		return hasRow(m) || hasColumn(m) || hasHeight(m) 
+				|| hasRowHeight(m) || hasRowColumn(m) || hasColumnHeight(m) 
 				|| hasRowColumnHeight(m);
 
 	}

@@ -1,9 +1,12 @@
 package view;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import model.Board;
 import model.Mark;
 
-public class TUI {
+public class TUI implements Observer {
 	private String graphicBoard;
 	private Board board;
 	public static final String EMPTY = "   ";
@@ -11,13 +14,12 @@ public class TUI {
 	public static final String CROSS = " X ";
 
 	public TUI(Board b) {
-		Mark m = Mark.EMPTY;
 		board = b;
 
-		graphicBoard = boardToString();
+		graphicBoard = boardToString(board);
 	}
 
-	public String boardToString() {
+	public String boardToString(Board board) {
 		int h = 0;
 		int c = 0;
 		graphicBoard = "";
@@ -99,4 +101,15 @@ public class TUI {
 
 		return EMPTY;
 	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		String boardString = this.boardToString(this.getBoard());
+		System.out.println(boardString);
+	}
+	
+	public Board getBoard() {
+		return board;
+	}
+
 }

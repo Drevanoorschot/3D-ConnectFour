@@ -17,6 +17,7 @@ public class Game {
 		player2 = p2;
 		board = new Board();
 		tui = new TUI(board);
+		board.addObserver(tui);
 	}
 	
 	public void makeMove(Player player) 
