@@ -1,20 +1,18 @@
 package main;
 
+import controller.Game;
+import controller.HumanPlayer;
+import controller.Player;
 import model.Board;
 import model.Mark;
 import view.TUI;
 
 public class Connect4 {
 	public static void main(String[] args) {
-		Board board = new Board();
-		TUI view = new TUI(board);
-		System.out.println(view.boardToString());
-		board.setField(0, 0, 2, Mark.O);
-		System.out.println(view.boardToString());
-		board.setField(0, 1, 0, Mark.X);
-		System.out.println(view.boardToString());
-		board.setField(1, 1, 3, Mark.X);
-		System.out.println(view.boardToString());
+		Player player1 = new HumanPlayer(Mark.O, "Dude");
+		Player player2 = new HumanPlayer(Mark.X, "Dude2");
+		Game game = new Game(player1, player2);
+		game.play();
 	}
 }
 
