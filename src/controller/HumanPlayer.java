@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Scanner;
 
+import exceptions.InvalidInputException;
 import model.Mark;
 
 public class HumanPlayer extends Player {
@@ -16,6 +17,25 @@ public class HumanPlayer extends Player {
 		int[] coord = new int[3];
 		System.out.println(getName() + "(" + getMark() + ")" + ", your turn!");
 		in = new Scanner(System.in);
+		System.out.println("Do you want a hint? Y/N");
+		boolean valid = false;
+		while (!valid) {
+			try {
+				String input = in.nextLine();
+				input = input.toLowerCase();
+				if(input.equals("n")) {
+					valid = true;
+				} else if (input.equals("y")) {
+					getHint();
+					valid = true;
+				} else { 
+					throw new InvalidInputException();
+				}
+			} catch (InvalidInputException e) {
+				System.out.println(e.getMessage() + " Please write either N or Y");
+				valid = false;
+			}
+		}
 		System.out.println("Please enter a column number (starting at 0)");
 		coord[0] = -1;
 		while (coord[0] < 0) {
@@ -53,6 +73,13 @@ public class HumanPlayer extends Player {
 		}
 		// in.close();
 		return coord;
+	}
+	
+	public void getHint() {
+		NaiveStrategy naive = new NaiveStrategy();
+		int[] moves = new int[2];
+		moves = naive.generateMove(Mark.EMPTY);
+		System.out.println("Have you considered the move" + " c:" + moves[0] + ", r:" + moves[1] + ", h:" + moves[2] + " ?");
 	}
 
 }
