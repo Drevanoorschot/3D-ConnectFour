@@ -24,12 +24,12 @@ public abstract class Strategy implements Observer {
 	}
 
 	public int[] randomMove() {
+		List<int[]> myList = getPossibleMoves();
+		return myList.get((int) (Math.random() * myList.size()));
+	}
+
+	private List<int[]> getPossibleMoves() {
 		Board temp = getBoard();
-		/*
-		 * PENTRU FIECARE COORDONATA FACI O LISTA APOI IEI DIN FIECARE
-		 * COORDONATA IN ORDINE SI BAGI INTR-UN VECTOR TRIDIMENSIONAL
-		 * EZEZEZEZEEZZEZEZEZE
-		 */
 		List<int[]> myList = new ArrayList<int[]>();
 		for (int c = 0; c < temp.getDIM(); c++) {
 			for (int r = 0; r < temp.getDIM(); r++) {
@@ -51,7 +51,7 @@ public abstract class Strategy implements Observer {
 				}
 			}
 		}
-		return myList.get((int) (Math.random() * myList.size()));
+		return myList;
 	}
 
 	@Override
