@@ -39,7 +39,9 @@ public class Game {
 				try {
 					moveMade = true;
 					makeMove(this.detemineTurn());
-				} catch (IndexOutOfBoundsException | FieldNotFreeException | FieldBelowNotTakenException e) {
+				} catch (IndexOutOfBoundsException |
+						FieldNotFreeException | 
+						FieldBelowNotTakenException e) {
 					System.out.println(e.getMessage());
 					moveMade = false;
 				}
@@ -55,10 +57,10 @@ public class Game {
 	public void makeMove(Player player)
 			throws IndexOutOfBoundsException, FieldNotFreeException, FieldBelowNotTakenException {
 		int[] coords = player.determineMove();
-		int dim = board.getDIM();
-		if (coords[0] >= dim || coords[0] < 0 || coords[1] >= dim || coords[1] < 0 || coords[2] >= dim
-				|| coords[2] < 0) {
-			throw new IndexOutOfBoundsException("Field does not exist! Try a new move");
+		for (int coord : coords) {
+			if (coord >= board.getDIM() || coord < 0) {
+				throw new IndexOutOfBoundsException("Field does not exist! Try a new move");
+			}
 		}
 		if (board.getField(coords[0], coords[1], coords[2]) != Mark.EMPTY) {
 			throw new FieldNotFreeException();

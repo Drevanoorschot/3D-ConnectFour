@@ -5,6 +5,8 @@ import java.util.Scanner;
 import model.Mark;
 
 public class HumanPlayer extends Player {
+	private Scanner in;
+
 	public HumanPlayer(Mark m, String n) {
 		super(m, n);
 	}
@@ -13,7 +15,7 @@ public class HumanPlayer extends Player {
 	public int[] determineMove() {
 		int[] coord = new int[3];
 		System.out.println(getName() + "(" + getMark() + ")" + ", your turn!");
-		Scanner in = new Scanner(System.in);
+		in = new Scanner(System.in);
 		System.out.println("Please enter a column number (starting at 0)");
 		coord[0] = -1;
 		while (coord[0] < 0) {
