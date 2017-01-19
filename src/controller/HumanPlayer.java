@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public int[] determineMove() {
-		int[] coord = new int[3];
+		int[] coord = new int[2];
 		System.out.println(getName() + "(" + getMark() + ")" + ", your turn!");
 		in = new Scanner(System.in);
 		System.out.println("Do you want a hint? Y/N");
@@ -59,27 +59,14 @@ public class HumanPlayer extends Player {
 				coord[1] = -1;
 			}
 		}
-
-		System.out.println("Please enter a height number (starting at 0)");
-		coord[2] = -1;
-		while (coord[2] < 0) {
-			try {
-				String input = in.nextLine();
-				coord[2] = Integer.parseInt(input);
-			} catch (NumberFormatException e) {
-				System.out.println("Invalid input, please provide a valid column number");
-				coord[2] = -1;
-			}
-		}
-		// in.close();
 		return coord;
 	}
 	
 	public void getHint() {
-		NaiveStrategy naive = new NaiveStrategy();
+		Strategy naive = new NaiveStrategy();
 		int[] moves = new int[2];
 		moves = naive.generateMove(Mark.EMPTY);
-		System.out.println("Have you considered the move" + " c:" + moves[0] + ", r:" + moves[1] + ", h:" + moves[2] + " ?");
+		System.out.println("Have you considered the move" + " c:" + moves[0] + ", r:" + moves[1] + "?");
 	}
 
 }

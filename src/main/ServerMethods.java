@@ -12,14 +12,13 @@ public class ServerMethods implements Protocol {
 			throw new InvalidInputException("Usage: <port>");
 		}
 	}
-
 	 public void checkPort(String port) {
 		try {
 			Integer.parseInt(port);
 		} catch (NumberFormatException e) {
 			System.out.println("Port should be given as an integer");
 		}
-	}
+	 }
 	 
 	 public void checkServerSocket(ServerSocket sock, int port) {
 		 try {
