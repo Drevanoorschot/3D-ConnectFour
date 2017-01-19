@@ -5,6 +5,11 @@ import model.Mark;
 
 public class NaiveStrategy extends Strategy {
 
+	public NaiveStrategy(Player player) {
+		super(player);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -12,9 +17,9 @@ public class NaiveStrategy extends Strategy {
 	}
 
 	@Override
-	public int generateMove(Mark m) {
+	public int[] generateMove(Mark m) {
+		return randomMove(getBoard());
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }
