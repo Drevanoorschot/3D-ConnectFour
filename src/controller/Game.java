@@ -56,15 +56,15 @@ public class Game {
 			throws IndexOutOfBoundsException, FieldNotFreeException, FieldBelowNotTakenException {
 		int[] coords = player.determineMove();
 		int dim = board.getDIM();
+		if (coords[0] >= dim || coords[0] < 0 || coords[1] >= dim || coords[1] < 0 || coords[2] >= dim
+				|| coords[2] < 0) {
+			throw new IndexOutOfBoundsException("Field does not exist! Try a new move");
+		}
 		if (board.getField(coords[0], coords[1], coords[2]) != Mark.EMPTY) {
 			throw new FieldNotFreeException();
 		}
 		if (coords[2] != 0 && board.getField(coords[0], coords[1], coords[2] - 1) == Mark.EMPTY) {
 			throw new FieldBelowNotTakenException();
-		}
-		if (coords[0] >= dim || coords[0] < 0 || coords[1] >= dim || coords[1] < 0 || coords[2] >= dim
-				|| coords[2] < 0) {
-			throw new IndexOutOfBoundsException("Field does not exist!");
 		}
 		board.setField(coords[0], coords[1], coords[2], player.getMark());
 		turn++;
