@@ -18,7 +18,7 @@ public abstract class Strategy implements Observer {
 	public Strategy() {
 		board = new Board();
 	}
-	
+
 	public Board getBoard() {
 		return board;
 	}
@@ -33,21 +33,12 @@ public abstract class Strategy implements Observer {
 		List<int[]> myList = new ArrayList<int[]>();
 		for (int c = 0; c < temp.getDIM(); c++) {
 			for (int r = 0; r < temp.getDIM(); r++) {
-				for (int h = 0; h < temp.getDIM(); h++) {
-					if (h == 0 && temp.getField(c, r, h) == Mark.EMPTY) {
-						int[] move = new int[3];
-						move[0] = c;
-						move[1] = r;
-						move[2] = h;
-						myList.add(move);
-					} else if (h > 0 && temp.getField(c, r, h) == Mark.EMPTY
-							&& temp.getField(c, r, h - 1) != Mark.EMPTY) {
-						int[] move = new int[3];
-						move[0] = c;
-						move[1] = r;
-						move[2] = h;
-						myList.add(move);
-					}
+				
+				if (temp.getField(c, r, temp.getDIM() - 1) == Mark.EMPTY) {
+					int[] move = new int[2];
+					move[0] = c;
+					move[1] = r;
+					myList.add(move);
 				}
 			}
 		}

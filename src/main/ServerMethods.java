@@ -9,6 +9,8 @@ public class ServerMethods implements Protocol {
 		}
 	}
 	public void checkPort(String port) {
-		if ()
+		if (true) {
+			
+		}
 	}
 }

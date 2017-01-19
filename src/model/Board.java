@@ -3,7 +3,7 @@ package model;
 import java.util.Observable;
 
 public class Board extends Observable {
-	private static final int DIM = 5;
+	private static final int DIM = 4;
 	private Mark[][][] fields;
 
 	public Board() {
@@ -39,8 +39,16 @@ public class Board extends Observable {
 		this.notifyObservers();
 	}
 
-	public void setField(int col, int row, int height, Mark m) {
-		fields[col][row][height] = m;
+	public void setField(int col, int row, Mark m) {
+		int height;
+		int temp = 0;
+		for (height = 0; height < getDIM(); height++) {
+			if (getField(col, row, height) == Mark.EMPTY) {
+				temp = height;
+				height = getDIM();
+			}
+		}
+		fields[col][row][temp] = m;
 		this.setChanged();
 		this.notifyObservers();
 	}

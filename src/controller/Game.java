@@ -4,7 +4,6 @@ import exceptions.FieldBelowNotTakenException;
 import exceptions.FieldNotFreeException;
 import exceptions.HasNoWinnerException;
 import model.Board;
-import model.Mark;
 import view.TUI;
 
 public class Game {
@@ -62,13 +61,7 @@ public class Game {
 				throw new IndexOutOfBoundsException("Field does not exist! Try a new move");
 			}
 		}
-		if (board.getField(coords[0], coords[1], coords[2]) != Mark.EMPTY) {
-			throw new FieldNotFreeException();
-		}
-		if (coords[2] != 0 && board.getField(coords[0], coords[1], coords[2] - 1) == Mark.EMPTY) {
-			throw new FieldBelowNotTakenException();
-		}
-		board.setField(coords[0], coords[1], coords[2], player.getMark());
+		board.setField(coords[0], coords[1], player.getMark());
 		turn++;
 	}
 
