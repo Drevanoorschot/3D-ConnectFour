@@ -1,4 +1,4 @@
-package main.server;
+package main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,7 +10,6 @@ import java.net.Socket;
 
 import exceptions.generalErrors.UnknownMethodException;
 import exceptions.serverErrors.IllegalMethodUseException;
-import main.Protocol;
 
 public class ClientThread extends Thread {
 	protected Socket socket;
@@ -49,27 +48,13 @@ public class ClientThread extends Thread {
 			while (inputReader.ready()) {
 				String[] input = inputReader.readLine().split(" ");
 
-				if (input.length >= 2 
-						&& (input[0] + input[1]).equals(Protocol.CONNECT)) {
+				if (input.length >= 3 
+						&& (input[0] + input[1] + input[2]).equals(Protocol.CONNECT)) {
 					setClientName(input[1]);
-					connected = true;
-					System.out.println(getClientName() + " connected!");
 				} else {
 					throw new UnknownMethodException();
 				}
 			}
 		}
-	}
-
-	public Socket getSocket() {
-		return socket;
-	}
-
-	public String getClientName() {
-		return clientName;
-	}
-
-	public void setSocket(Socket socket) {
-		this.socket = socket;
 	}
 }

@@ -1,4 +1,4 @@
-package main.server;
+package main;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exceptions.InvalidInputException;
-import main.Protocol;
-import main.client.Client;
 
 public class ServerMethods implements Protocol {
 	private ServerSocket serversocket;
@@ -58,7 +56,7 @@ public class ServerMethods implements Protocol {
 		Socket socket = null;
 		try {
 			socket = serversocket.accept();
-			System.out.println("client connecting...");
+			System.out.println("client Connected!");
 		} catch (IOException e) {
 			System.out.println("An IO-Exception occured");
 			//TODO make sensible exception handling
