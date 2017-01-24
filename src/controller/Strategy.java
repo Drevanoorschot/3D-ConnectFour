@@ -28,7 +28,7 @@ public abstract class Strategy implements Observer {
 		return myList.get((int) (Math.random() * myList.size()));
 	}
 
-	private List<int[]> getPossibleMoves() {
+	public List<int[]> getPossibleMoves() {
 		Board temp = getBoard();
 		List<int[]> myList = new ArrayList<int[]>();
 		for (int c = 0; c < temp.getDIM(); c++) {
