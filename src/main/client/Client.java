@@ -1,8 +1,10 @@
-package main;
+package main.client;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -12,6 +14,7 @@ public class Client {
 	protected String name;
 	private int port;
 	private InetAddress ipAddress;
+	private Socket socket;
 
 	public static void main(String[] args) {
 		Client client = new Client();
@@ -19,7 +22,7 @@ public class Client {
 		while (!infoReady) {
 			try {
 				client.getConnectionInfo();
-				Socket sock = new Socket(client.getIpAddress(), client.getPort());
+				client.setSocket(client.getIpAddress(), client.getPort());
 				infoReady = true;
 			} catch (IOException e) {
 				System.out.println("An IO-Exception Occured, please enter information again. "
@@ -28,6 +31,15 @@ public class Client {
 						+ "- incorrect port number\n");
 			}
 		}
+		try {
+			client.handleServerInput();
+			BufferedWriter output = new BufferedWriter(
+					new OutputStreamWriter(client.getSocket().getOutputStream()));
+			output.write("CONNECT " + client.getName());
+		} catch (IOException e) {
+			System.out.println("IO-exception occured");
+		}
+		
 	}
 
 	public void setName(String name) {
@@ -41,6 +53,10 @@ public class Client {
 	public void setIpAddress(InetAddress ipAddress) {
 		this.ipAddress = ipAddress;
 	}
+	
+	public void setSocket(InetAddress ip, int prt) throws IOException {
+		socket = new Socket(ip, prt);
+	}
 
 	public String getName() {
 		return name;
@@ -52,6 +68,10 @@ public class Client {
 
 	public InetAddress getIpAddress() {
 		return ipAddress;
+	}
+	
+	public Socket getSocket() {
+		return socket;
 	}
 
 	public void getConnectionInfo() throws IOException {
@@ -68,7 +88,12 @@ public class Client {
 		System.out.println("To what port do you wish to connect?");
 		setPort(Integer.parseInt(terminalInput.readLine()));
 	}
-	public void HandleTerminalInput() {
+	public void handleTerminalInput() {
 		
+	}
+	
+	public void handleServerInput() throws IOException {
+		Thread serverHandler = new ServerInputHandler(socket);
+		serverHandler.start();
 	}
 }
