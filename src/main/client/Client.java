@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import exceptions.serverErrors.UserAlreadyConnectedException;
 import main.Protocol;
 
 public class Client {
@@ -21,31 +22,37 @@ public class Client {
 
 	public static void main(String[] args) {
 		Client client = new Client();
+		BufferedReader reader = null;
+		PrintWriter writer = null;
 		boolean infoReady = false;
 		while (!infoReady) {
 			try {
 				client.getConnectionInfo();
 				client.sock = new Socket(client.ipAddress, client.port);
-				infoReady = true;
+				reader = new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
+				writer = new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
+				client.connect(writer);
+				if (!reader.readLine().equals(Protocol.CONFIRM)) {
+					throw new UserAlreadyConnectedException();
+				} else {
+					infoReady = true;
+				}
+
 			} catch (IOException e) {
-				System.out.println("An IO-Exception Occured, please enter information again. " 
-						+ "Possible causes:\n"
-						+ "- incorrect ip address\n" 
-						+ "- incorrect port number\n");
+				System.out.println("An IO-Exception Occured, please enter information again. " + "Possible causes:\n"
+						+ "- incorrect ip address\n" + "- incorrect port number\n");
+			} catch (UserAlreadyConnectedException e) {
+				System.out.println(e.getMessage() + ". Please choose a different username");
 			}
 		}
 		try {
-			ServerInputHandler serverInputHandler = new ServerInputHandler(client.sock);
+			ServerInputHandler serverInputHandler = new ServerInputHandler(client.sock, reader);
 			serverInputHandler.start();
-			PrintWriter writer = 
-					new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
-			client.connect(writer);
 			client.handleTerminalInput(writer, serverInputHandler);
 			writer.close();
 		} catch (IOException e) {
 			System.out.println("IO exception in main client");
 		}
-		
 
 	}
 
@@ -62,9 +69,8 @@ public class Client {
 		System.out.println("To what port do you wish to connect?");
 		port = Integer.parseInt(terminalInput.readLine());
 	}
-	
-	public void handleTerminalInput(PrintWriter writer, ServerInputHandler serverInputHandler) 
-			throws IOException {
+
+	public void handleTerminalInput(PrintWriter writer, ServerInputHandler serverInputHandler) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		boolean running = true;
 		while (running) {
@@ -80,7 +86,7 @@ public class Client {
 			}
 		}
 	}
-	
+
 	public void connect(PrintWriter writer) {
 		writer.println("CONNECT " + name);
 		writer.flush();

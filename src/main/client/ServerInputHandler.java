@@ -8,21 +8,21 @@ import java.net.Socket;
 
 public class ServerInputHandler extends Thread {
 	private Socket socket;
-	private InputStream input;
+	private BufferedReader input;
 	private boolean running;
 
-	public ServerInputHandler(Socket sock) throws IOException {
+	public ServerInputHandler(Socket sock, BufferedReader reader) throws IOException {
 		socket = sock;
-		input = socket.getInputStream();
+		input = reader;
 	}
 
 	public void run() {
 		running = true;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		
 		while (running) {
 			try {
-				if (reader.ready()) {
-					System.out.println(reader.readLine());
+				if (input.ready()) {
+					System.out.println(input.readLine());
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

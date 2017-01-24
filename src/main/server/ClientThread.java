@@ -38,11 +38,14 @@ public class ClientThread extends Thread {
 				String[] text = reader.readLine().split(" ");
 				if (text.length >= 2 && text[0].equals(Protocol.CONNECT)) {
 					connect(text);
+					writer.println(Protocol.CONFIRM);
+					writer.flush();
 				}
 				if (text.length >= 1 && text[0].equals(Protocol.DISCONNECT)) {
 					disconnect();
 					running = false;
 				}
+				
 			} catch (IOException e) {
 				System.out.println("IO - exception in run. Unexpected disconnect.\n"
 						+ " Terminating ClientThread...");
@@ -54,7 +57,7 @@ public class ClientThread extends Thread {
 				}
 				running = false;
 			} catch (UserAlreadyConnectedException e) {
-				System.out.println("");
+				System.out.println(e.getMessage());
 				writer.println(e.getMessage());
 				writer.flush();
 				running = false;
