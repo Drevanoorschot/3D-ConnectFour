@@ -9,38 +9,76 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import exceptions.serverErrors.IllegalMethodUseException;
+import exceptions.serverErrors.UserAlreadyConnectedException;
 import main.Protocol;
 
 public class ClientThread extends Thread {
-	protected Socket socket;
-	protected InputStream input;
-	protected OutputStream output;
+	private Socket socket;
+	private InputStream input;
+	private OutputStream output;
+	private Server server;
+	private String name;
 
-	public ClientThread(Socket s) throws IOException {
+	public ClientThread(Socket s, Server svr) throws IOException {
 		socket = s;
 		input = socket.getInputStream();
 		output = socket.getOutputStream();
-
+		server = svr;
 	}
 
 	@Override
 	public void run() {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(output));
+		System.out.println("Client is connecting...");
 		boolean running = true;
 		while (running) {
 			try {
-				if (reader.ready()) {
-					String[] text = reader.readLine().split(" ");
-					if (text.length >= 2 && text[0].equals("CONNECT")) {
-						System.out.println("connected!");
-					}
+				String[] text = reader.readLine().split(" ");
+				if (text.length >= 2 && text[0].equals(Protocol.CONNECT)) {
+					connect(text);
+				}
+				if (text.length >= 1 && text[0].equals(Protocol.DISCONNECT)) {
+					disconnect();
 				}
 			} catch (IOException e) {
 				System.out.println("IO - exception in run");
+			} catch (UserAlreadyConnectedException | IllegalMethodUseException e) {
+				writer.println(e.getMessage());
+				writer.flush();
 			}
 		}
-		
+
+	}
+
+	public void connect(String[] text) throws UserAlreadyConnectedException {
+		boolean exists = false;
+		for (ClientThread clientThread : server.getConnectedClients()) {
+			if (clientThread.getClientName().equals(text[1])) {
+				exists = true;
+			}
+		}
+		if (!exists) {
+			System.out.println(text[1] + " connected");
+			name = text[1];
+			server.addConnectedClient(this);
+		} else {
+			throw new UserAlreadyConnectedException();
+		}
+	}
+	
+	public void disconnect() throws IllegalMethodUseException {
+		if (server.getConnectedClients().contains(this)) {
+			server.removeConnectedClient(this);
+		} else {
+			throw new IllegalMethodUseException("You are not (properly) connected");
+		}
+	}
+	
+	
+	public String getClientName() {
+		return name;
 	}
 
 }

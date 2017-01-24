@@ -3,13 +3,36 @@ package main.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import exceptions.InvalidInputException;
 
 public class Server {
 	private int port;
 	private ServerSocket serverSocket;
+	private List<ClientThread> connectedClients;
 	
+	public Server() {
+		connectedClients = new ArrayList<ClientThread>();
+	}
+	
+	public List<ClientThread> getConnectedClients() {
+		return connectedClients;
+	}
+
+	public void addConnectedClient(ClientThread ct) {
+		connectedClients.add(ct);
+	}
+	
+	public void removeConnectedClient(ClientThread ct) {
+		for (int i = 0; i < connectedClients.size(); i++) {
+			if (connectedClients.get(i).equals(ct)) {
+				connectedClients.remove(i);
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		Server server = new Server();
 		try {
@@ -24,7 +47,7 @@ public class Server {
 		while (running) {
 			try {
 				Socket socket = server.serverSocket.accept();
-				Thread clientThread = new ClientThread(socket);
+				Thread clientThread = new ClientThread(socket, server);
 				clientThread.start();
 			} catch (IOException e) {
 				System.out.println("IO exception occured");

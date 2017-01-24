@@ -12,7 +12,7 @@ public interface Protocol {
      * Example: <code>CONNECT stevejobs 01</code>
      * Or: <code>CONNECT hans</code>
      */
-    public static final String CONNECT = "CONNECT %s %s";
+    public static final String CONNECT = "CONNECT";
 
     /**
      * Disconnect this client.
