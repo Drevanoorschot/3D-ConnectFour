@@ -9,6 +9,7 @@ import java.net.Socket;
 public class ServerInputHandler extends Thread {
 	private Socket socket;
 	private InputStream input;
+	private boolean running;
 
 	public ServerInputHandler(Socket sock) throws IOException {
 		socket = sock;
@@ -16,15 +17,20 @@ public class ServerInputHandler extends Thread {
 	}
 
 	public void run() {
-		boolean running = true;
+		running = true;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		while (running) {
 			try {
-				System.out.println(reader.readLine());
+				if (reader.ready()) {
+					System.out.println(reader.readLine());
+				}
 			} catch (IOException e) {
-				System.out.println("IO-Exception on server occured");
+				e.printStackTrace();
 			}
 		}
 	}
-}
 
+	public void stopRunning() {
+		running = false;
+	}
+}

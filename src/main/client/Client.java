@@ -2,12 +2,13 @@ package main.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+
+import main.Protocol;
 
 public class Client {
 
@@ -34,13 +35,13 @@ public class Client {
 			}
 		}
 		try {
-			Thread serverInputHandler = new ServerInputHandler(client.sock);
+			ServerInputHandler serverInputHandler = new ServerInputHandler(client.sock);
 			serverInputHandler.start();
-			BufferedReader reader = 
-					new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
 			PrintWriter writer = 
 					new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
 			client.connect(writer);
+			client.handleTerminalInput(writer, serverInputHandler);
+			writer.close();
 		} catch (IOException e) {
 			System.out.println("IO exception in main client");
 		}
@@ -62,8 +63,22 @@ public class Client {
 		port = Integer.parseInt(terminalInput.readLine());
 	}
 	
-	public void handleTerminalInput(PrintWriter writer, BufferedReader reader) {
-		
+	public void handleTerminalInput(PrintWriter writer, ServerInputHandler serverInputHandler) 
+			throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		boolean running = true;
+		while (running) {
+			String input = reader.readLine();
+			String[] parsedInput = input.split(" ");
+			if (parsedInput.length >= 1 && parsedInput[0].equals(Protocol.DISCONNECT)) {
+				writer.println(input);
+				writer.flush();
+				running = false;
+				serverInputHandler.stopRunning();
+				writer.close();
+				reader.close();
+			}
+		}
 	}
 	
 	public void connect(PrintWriter writer) {

@@ -41,10 +41,24 @@ public class ClientThread extends Thread {
 				}
 				if (text.length >= 1 && text[0].equals(Protocol.DISCONNECT)) {
 					disconnect();
+					running = false;
 				}
 			} catch (IOException e) {
-				System.out.println("IO - exception in run");
-			} catch (UserAlreadyConnectedException | IllegalMethodUseException e) {
+				System.out.println("IO - exception in run. Unexpected disconnect.\n"
+						+ " Terminating ClientThread...");
+				try {
+					disconnect();
+					running = false;
+				} catch (IllegalMethodUseException e1) {
+					//do nothing (unexpected behaviour already occured an is repported to server)
+				}
+				running = false;
+			} catch (UserAlreadyConnectedException e) {
+				System.out.println("");
+				writer.println(e.getMessage());
+				writer.flush();
+				running = false;
+			} catch (IllegalMethodUseException e) {
 				writer.println(e.getMessage());
 				writer.flush();
 			}
@@ -71,6 +85,7 @@ public class ClientThread extends Thread {
 	public void disconnect() throws IllegalMethodUseException {
 		if (server.getConnectedClients().contains(this)) {
 			server.removeConnectedClient(this);
+			System.out.println(name + " disconnected");
 		} else {
 			throw new IllegalMethodUseException("You are not (properly) connected");
 		}
