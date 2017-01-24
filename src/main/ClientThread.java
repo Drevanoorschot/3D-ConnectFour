@@ -8,22 +8,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import exceptions.generalErrors.UnknownMethodException;
-import exceptions.serverErrors.IllegalMethodUseException;
-
 public class ClientThread extends Thread {
 	protected Socket socket;
-	private boolean connected;
-	private String clientName;
-
+	
 	public ClientThread(Socket s) {
 		socket = s;
 	}
-
-	public void setClientName(String name) {
-		clientName = name;
-	}
-
 	@Override
 	public void run() {
 		BufferedReader inputReader = null;
@@ -31,30 +21,15 @@ public class ClientThread extends Thread {
 		try {
 			inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			handleInput(inputReader, output);
-		} catch (IOException | IllegalMethodUseException | UnknownMethodException e) {
-			try {
-				output.write(e.getMessage());
-			} catch (IOException e1) {
-				System.out.println("IO-Exception occured");
+			String input = inputReader.readLine();
+			while (!input.equals(Protocol.CONNECT)) {
+				output.write("ERROR 111: Method not allowed at this moment");
 			}
+		} catch (IOException e) {
+			// TODO implement proper exception handling
+			System.out.println("An IO-Exception Occured");
 		}
-	}
-
-	public void handleInput(BufferedReader inputReader, BufferedWriter output)
-			throws IOException, IllegalMethodUseException, UnknownMethodException {
-		boolean running = true;
-		while (running) {
-			while (inputReader.ready()) {
-				String[] input = inputReader.readLine().split(" ");
-
-				if (input.length >= 3 
-						&& (input[0] + input[1] + input[2]).equals(Protocol.CONNECT)) {
-					setClientName(input[1]);
-				} else {
-					throw new UnknownMethodException();
-				}
-			}
-		}
+			
+		
 	}
 }
