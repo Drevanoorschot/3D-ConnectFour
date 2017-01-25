@@ -83,6 +83,9 @@ public class Client {
 				serverInputHandler.stopRunning();
 				writer.close();
 				reader.close();
+			} else {
+				writer.println(input);
+				writer.flush();
 			}
 		}
 	}

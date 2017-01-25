@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import exceptions.generalErrors.UnknownMethodException;
 import exceptions.serverErrors.IllegalMethodUseException;
 import exceptions.serverErrors.UserAlreadyConnectedException;
 import main.Protocol;
@@ -19,6 +20,8 @@ public class ClientThread extends Thread {
 	private OutputStream output;
 	private Server server;
 	private String name;
+	private BufferedReader reader;
+	private PrintWriter writer;
 
 	public ClientThread(Socket s, Server svr) throws IOException {
 		socket = s;
@@ -29,8 +32,8 @@ public class ClientThread extends Thread {
 
 	@Override
 	public void run() {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-		PrintWriter writer = new PrintWriter(new OutputStreamWriter(output));
+		reader = new BufferedReader(new InputStreamReader(input));
+		writer = new PrintWriter(new OutputStreamWriter(output));
 		System.out.println("Client is connecting...");
 		boolean running = true;
 		while (running) {
@@ -38,12 +41,17 @@ public class ClientThread extends Thread {
 				String[] text = reader.readLine().split(" ");
 				if (text.length >= 2 && text[0].equals(Protocol.CONNECT)) {
 					connect(text);
-					writer.println(Protocol.CONFIRM);
-					writer.flush();
-				}
-				if (text.length >= 1 && text[0].equals(Protocol.DISCONNECT)) {
+				} else if (text.length == 1 && text[0].equals(Protocol.DISCONNECT)) {
 					disconnect();
 					running = false;
+				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.READY)) {
+					readyClient();
+				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.UNREADY)){
+					unReadyClient();
+					writer.println("You are now unready to play a game");
+					writer.flush();
+				} else {
+					throw new UnknownMethodException();
 				}
 				
 			} catch (IOException e) {
@@ -58,12 +66,10 @@ public class ClientThread extends Thread {
 				running = false;
 			} catch (UserAlreadyConnectedException e) {
 				System.out.println(e.getMessage());
-				writer.println(e.getMessage());
-				writer.flush();
+				writeToClient(e.getMessage());
 				running = false;
-			} catch (IllegalMethodUseException e) {
-				writer.println(e.getMessage());
-				writer.flush();
+			} catch (IllegalMethodUseException | UnknownMethodException e) {
+				writeToClient(e.getMessage());
 			}
 		}
 
@@ -78,8 +84,9 @@ public class ClientThread extends Thread {
 		}
 		if (!exists) {
 			System.out.println(text[1] + " connected");
+			writeToClient(Protocol.CONFIRM);
 			name = text[1];
-			server.addConnectedClient(this);
+			server.getConnectedClients().add(this);
 		} else {
 			throw new UserAlreadyConnectedException();
 		}
@@ -87,16 +94,44 @@ public class ClientThread extends Thread {
 	
 	public void disconnect() throws IllegalMethodUseException {
 		if (server.getConnectedClients().contains(this)) {
-			server.removeConnectedClient(this);
+			server.getConnectedClients().remove(this);
+			server.getReadyClients().remove(this);
 			System.out.println(name + " disconnected");
+			writeToClient("You disconnected");
 		} else {
 			throw new IllegalMethodUseException("You are not (properly) connected");
 		}
 	}
 	
+	public void readyClient() throws IllegalMethodUseException {
+		if (!server.getConnectedClients().contains(this)) {
+			throw new IllegalMethodUseException("You are not (properly) connected");
+		}
+		if (server.getReadyClients().contains(this)) {
+			throw new IllegalMethodUseException("You are already ready");
+		} else {
+			server.getReadyClients().add(this);
+			System.out.println(name + " is ready to play");
+			writeToClient("You are now ready to play a game");
+		}
+	}
+	
+	public void unReadyClient() throws IllegalMethodUseException {
+		if (server.getReadyClients().contains(this)) {
+			server.getReadyClients().remove(this);
+			System.out.println(name + " is not ready to play anymore");
+		} else {
+			throw new IllegalMethodUseException("You weren't ready so unready couldn't be invoked");
+		}
+	}
 	
 	public String getClientName() {
 		return name;
+	}
+	
+	public void writeToClient(String msg) {
+		writer.println(msg);
+		writer.flush();
 	}
 
 }

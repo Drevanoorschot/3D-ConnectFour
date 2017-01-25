@@ -12,25 +12,19 @@ public class Server {
 	private int port;
 	private ServerSocket serverSocket;
 	private List<ClientThread> connectedClients;
+	private List<ClientThread> readyClients;
 	
 	public Server() {
 		connectedClients = new ArrayList<ClientThread>();
+		readyClients = new ArrayList<ClientThread>();
 	}
 	
 	public List<ClientThread> getConnectedClients() {
 		return connectedClients;
 	}
-
-	public void addConnectedClient(ClientThread ct) {
-		connectedClients.add(ct);
-	}
 	
-	public void removeConnectedClient(ClientThread ct) {
-		for (int i = 0; i < connectedClients.size(); i++) {
-			if (connectedClients.get(i).equals(ct)) {
-				connectedClients.remove(i);
-			}
-		}
+	public List<ClientThread> getReadyClients() {
+		return readyClients;
 	}
 
 	public static void main(String[] args) {
