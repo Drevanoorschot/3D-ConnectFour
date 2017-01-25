@@ -1,5 +1,7 @@
 package controller;
 
+import controller.players.ComputerPlayer;
+import controller.players.Player;
 import exceptions.FieldBelowNotTakenException;
 import exceptions.FieldNotFreeException;
 import exceptions.HasNoWinnerException;

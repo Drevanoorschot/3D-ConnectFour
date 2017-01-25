@@ -1,4 +1,4 @@
-package controller;
+package controller.strategies;
 
 import model.Mark;
 

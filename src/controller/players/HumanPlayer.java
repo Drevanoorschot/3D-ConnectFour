@@ -1,7 +1,9 @@
-package controller;
+package controller.players;
 
 import java.util.Scanner;
 
+import controller.strategies.NaiveStrategy;
+import controller.strategies.Strategy;
 import exceptions.InvalidInputException;
 import model.Mark;
 

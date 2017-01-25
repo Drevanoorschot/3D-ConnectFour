@@ -1,5 +1,6 @@
-package controller;
+package controller.players;
 
+import controller.strategies.Strategy;
 import model.Mark;
 
 public class ComputerPlayer extends Player {

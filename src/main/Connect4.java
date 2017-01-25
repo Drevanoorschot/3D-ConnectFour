@@ -1,11 +1,11 @@
 package main;
 
-import controller.ComputerPlayer;
 import controller.Game;
-import controller.HumanPlayer;
-import controller.NaiveStrategy;
-import controller.Player;
-import controller.SmartStrategy;
+import controller.players.ComputerPlayer;
+import controller.players.HumanPlayer;
+import controller.players.Player;
+import controller.strategies.NaiveStrategy;
+import controller.strategies.SmartStrategy;
 import model.Mark;
 
 public class Connect4 {
