@@ -43,10 +43,21 @@ public class Server {
 				Socket socket = server.serverSocket.accept();
 				Thread clientThread = new ClientThread(socket, server);
 				clientThread.start();
+				if (server.getReadyClients().size() >= 2) {
+					server.startGame();
+					
+				}
 			} catch (IOException e) {
 				System.out.println("IO exception occured");
 			}
 		}
+	}
+
+	public void startGame() {
+		Thread game = new GameThread(getReadyClients().get(0), getReadyClients().get(1));
+		getReadyClients().remove(1);
+		getReadyClients().remove(0);
+		game.start();
 	}
 	
 	public void checkArguments(String[] args) throws InvalidInputException {
@@ -64,4 +75,5 @@ public class Server {
 			System.exit(0);
 		}
 	}
+
 }
