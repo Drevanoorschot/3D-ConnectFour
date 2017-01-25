@@ -13,6 +13,7 @@ import exceptions.generalErrors.UnknownMethodException;
 import exceptions.serverErrors.IllegalMethodUseException;
 import exceptions.serverErrors.UserAlreadyConnectedException;
 import main.Protocol;
+import model.Mark;
 
 public class ClientThread extends Thread {
 	private Socket socket;
@@ -22,12 +23,17 @@ public class ClientThread extends Thread {
 	private String name;
 	private BufferedReader reader;
 	private PrintWriter writer;
+	private Mark mark;
+	private int[] moveBuffer;
+
+	private GameThread gameThread;
 
 	public ClientThread(Socket s, Server svr) throws IOException {
 		socket = s;
 		input = socket.getInputStream();
 		output = socket.getOutputStream();
 		server = svr;
+		moveBuffer = null;
 	}
 
 	@Override
@@ -38,18 +44,27 @@ public class ClientThread extends Thread {
 		boolean running = true;
 		while (running) {
 			try {
-				String[] text = reader.readLine().split(" ");
+				String rawText = reader.readLine();
+				String[] text = rawText.split(" ");
 				if (text.length >= 2 && text[0].equals(Protocol.CONNECT)) {
 					connect(text);
 				} else if (text.length == 1 && text[0].equals(Protocol.DISCONNECT)) {
 					disconnect();
 					running = false;
-				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.READY)) {
+				} else if (text.length == 2 && rawText.equals(Protocol.READY)) {
 					readyClient();
-				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.UNREADY)){
+				} else if (text.length == 2 && rawText.equals(Protocol.UNREADY)) {
 					unReadyClient();
-				} else if (text.length  == 2 && (text[0] + " " + text[1]).equals(Protocol.ASK_PLAYERS_ALL)) {
+				} else if (text.length == 2 && rawText.equals(Protocol.ASK_PLAYERS_ALL)) {
 					writePlayersAll();
+				} else if (text.length == 4 && rawText.startsWith(Protocol.CLIENT_MOVE)) {
+					if (gameThread != null && gameThread.determineTurn().equals(this)) {
+						doMove(text);
+					} else {
+						throw new IllegalMethodUseException("possible causes:\n"
+								+ "- not in game\n"
+								+ "- not your turn");
+					}
 				} else {
 					throw new UnknownMethodException();
 				}
@@ -126,7 +141,14 @@ public class ClientThread extends Thread {
 		}
 	}
 	
-	private void writePlayersAll() {
+	public void doMove(String[] text) throws NumberFormatException {
+		moveBuffer = new int[2];
+		moveBuffer[0] = Integer.parseInt(text[2]);
+		moveBuffer[1] = Integer.parseInt(text[3]);
+		gameThread.notify();
+	}
+	
+	public void writePlayersAll() {
 		String players = Protocol.RES_PLAYERS_ALL;
 		for (ClientThread ct : server.getConnectedClients()) {
 			players = players + " " + ct.getClientName();
@@ -136,6 +158,26 @@ public class ClientThread extends Thread {
 	
 	public String getClientName() {
 		return name;
+	}
+	
+	public Mark getMark() {
+		return mark;
+	}
+	
+	public int[] getMoveBuffer() {
+		return moveBuffer;
+	}
+
+	public void setMoveBuffer(int[] moveBuffer) {
+		this.moveBuffer = moveBuffer;
+	}
+
+	public void setMark(Mark mark) {
+		this.mark = mark;
+	}
+
+	public void setGameThread(GameThread gameThread) {
+		this.gameThread = gameThread;
 	}
 	
 	public void writeToClient(String msg) {

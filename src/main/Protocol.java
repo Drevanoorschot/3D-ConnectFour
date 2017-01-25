@@ -35,7 +35,7 @@ public interface Protocol {
      * Used to send move by a client.
      * Example: <code>GAME MOVE 2 1</code>
      */
-    public static final String CLIENT_MOVE = "GAME MOVE %d %d";
+    public static final String CLIENT_MOVE = "GAME MOVE";
 
     /**
      * Requests list of players on this server.
@@ -60,14 +60,14 @@ public interface Protocol {
      * LAST ARGUMENT CAN BE MULTIPLE NAMES!
      * Example: <code>GAME START bob peter</code>
      */
-    public static final String START = "GAME START %s";
+    public static final String START = "GAME START";
 
     /**
      * Broadcasted message announcing current move and future move (if applicable).
      * Example with future move: <code>GAME MOVE bob 2 0 hans</code> (Current move by bob at (2,0), next is hans).
      * Example without: <code>GAME MOVE hans 2 2</code> (Current move by hans at (2,2), this was final turn).
      */
-    public static final String SERVER_MOVE = "GAME MOVE %s %d %d %s";
+    public static final String SERVER_MOVE = "GAME MOVE";
 
     /**
      * Broadcasted when game has ended in draw.
@@ -78,7 +78,7 @@ public interface Protocol {
      * Broadcasted when game has ended in winner.
      * Example: <code>GAME END PLAYER hans</code>: hans has won the game.
      */
-    public static final String END_WINNER = "GAME END PLAYER %s";
+    public static final String END_WINNER = "GAME END PLAYER";
 
     /**
      * Result of player list query.
