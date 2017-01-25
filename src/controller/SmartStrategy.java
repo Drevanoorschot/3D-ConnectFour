@@ -37,7 +37,7 @@ public class SmartStrategy extends Strategy {
 			}
 		}
 		
-		List<int[]> safeMoves = new ArrayList<>();;
+		List<int[]> safeMoves = new ArrayList<>();
 		for(int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
 			temp.setField(myList.get(i)[0], myList.get(i)[1], m);
