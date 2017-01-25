@@ -1,7 +1,9 @@
-package controller;
+package controller.players;
 
 import java.util.Scanner;
 
+import controller.strategies.NaiveStrategy;
+import controller.strategies.Strategy;
 import exceptions.InvalidInputException;
 import model.Mark;
 
@@ -23,7 +25,7 @@ public class HumanPlayer extends Player {
 			try {
 				String input = in.nextLine();
 				input = input.toLowerCase();
-				if(input.equals("n")) {
+				if (input.equals("n")) {
 					valid = true;
 				} else if (input.equals("y")) {
 					getHint();
@@ -66,7 +68,8 @@ public class HumanPlayer extends Player {
 		Strategy naive = new NaiveStrategy();
 		int[] moves = new int[2];
 		moves = naive.generateMove(Mark.EMPTY);
-		System.out.println("Have you considered the move" + " c:" + moves[0] + ", r:" + moves[1] + "?");
+		System.out.println(
+				"Have you considered the move" + " c:" + moves[0] + ", r:" + moves[1] + "?");
 	}
 
 }

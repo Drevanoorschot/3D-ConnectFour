@@ -12,7 +12,7 @@ public interface Protocol {
      * Example: <code>CONNECT stevejobs 01</code>
      * Or: <code>CONNECT hans</code>
      */
-    public static final String CONNECT = "CONNECT %s %s";
+    public static final String CONNECT = "CONNECT";
 
     /**
      * Disconnect this client.
@@ -85,7 +85,7 @@ public interface Protocol {
      * LAST ARGUMENTS CAN BE MULTIPLE NAMES.
      * Example: <code>PLAYERS ALL hans peter dirk tessa</code>: All players in this server are these.
      */
-    public static final String RES_PLAYERS_ALL = "PLAYERS ALL %s";
+    public static final String RES_PLAYERS_ALL = "PLAYERS ALL";
 
     /**
      * Result of player list query with extension criteria.
