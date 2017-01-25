@@ -48,8 +48,8 @@ public class ClientThread extends Thread {
 					readyClient();
 				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.UNREADY)){
 					unReadyClient();
-					writer.println("You are now unready to play a game");
-					writer.flush();
+				} else if (text.length  == 2 && (text[0] + " " + text[1]).equals(Protocol.ASK_PLAYERS_ALL)) {
+					writePlayersAll();
 				} else {
 					throw new UnknownMethodException();
 				}
@@ -120,9 +120,18 @@ public class ClientThread extends Thread {
 		if (server.getReadyClients().contains(this)) {
 			server.getReadyClients().remove(this);
 			System.out.println(name + " is not ready to play anymore");
+			writeToClient("You are now unready to play a game");
 		} else {
 			throw new IllegalMethodUseException("You weren't ready so unready couldn't be invoked");
 		}
+	}
+	
+	private void writePlayersAll() {
+		String players = Protocol.RES_PLAYERS_ALL;
+		for (ClientThread ct : server.getConnectedClients()) {
+			players = players + " " + ct.getClientName();
+		}
+		writeToClient(players);
 	}
 	
 	public String getClientName() {
@@ -133,5 +142,7 @@ public class ClientThread extends Thread {
 		writer.println(msg);
 		writer.flush();
 	}
+	
+	
 
 }

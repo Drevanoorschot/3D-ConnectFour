@@ -85,7 +85,7 @@ public interface Protocol {
      * LAST ARGUMENTS CAN BE MULTIPLE NAMES.
      * Example: <code>PLAYERS ALL hans peter dirk tessa</code>: All players in this server are these.
      */
-    public static final String RES_PLAYERS_ALL = "PLAYERS ALL %s";
+    public static final String RES_PLAYERS_ALL = "PLAYERS ALL";
 
     /**
      * Result of player list query with extension criteria.

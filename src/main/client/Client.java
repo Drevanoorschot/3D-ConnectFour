@@ -39,8 +39,10 @@ public class Client {
 				}
 
 			} catch (IOException e) {
-				System.out.println("An IO-Exception Occured, please enter information again. " + "Possible causes:\n"
-						+ "- incorrect ip address\n" + "- incorrect port number\n");
+				System.out.println("An IO-Exception Occured, please enter information again. " 
+						+ "Possible causes:\n"
+						+ "- incorrect ip address\n" 
+						+ "- incorrect port number\n");
 			} catch (UserAlreadyConnectedException e) {
 				System.out.println(e.getMessage() + ". Please choose a different username");
 			}
@@ -91,7 +93,7 @@ public class Client {
 	}
 
 	public void connect(PrintWriter writer) {
-		writer.println("CONNECT " + name);
+		writer.println(Protocol.CONNECT + " " + name);
 		writer.flush();
 	}
 }
