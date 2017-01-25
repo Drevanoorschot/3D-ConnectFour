@@ -19,20 +19,24 @@ public class Client {
 	private int port;
 	private InetAddress ipAddress;
 	private Socket sock;
+	private BufferedReader reader;
+	private PrintWriter writer;
 
 	public static void main(String[] args) {
 		Client client = new Client();
-		BufferedReader reader = null;
-		PrintWriter writer = null;
+		client.reader = null;
+		client.writer = null;
 		boolean infoReady = false;
 		while (!infoReady) {
 			try {
 				client.getConnectionInfo();
 				client.sock = new Socket(client.ipAddress, client.port);
-				reader = new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
-				writer = new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
-				client.connect(writer);
-				if (!reader.readLine().equals(Protocol.CONFIRM)) {
+				client.reader = 
+						new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
+				client.writer = 
+						new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
+				client.connect();
+				if (!client.reader.readLine().equals(Protocol.CONFIRM)) {
 					throw new UserAlreadyConnectedException();
 				} else {
 					infoReady = true;
@@ -48,10 +52,9 @@ public class Client {
 			}
 		}
 		try {
-			ServerInputHandler serverInputHandler = new ServerInputHandler(client.sock, reader);
+			ServerInputHandler serverInputHandler = new ServerInputHandler(client.reader);
 			serverInputHandler.start();
-			client.handleTerminalInput(writer, serverInputHandler);
-			writer.close();
+			client.handleTerminalInput(serverInputHandler);
 		} catch (IOException e) {
 			System.out.println("IO exception in main client");
 		}
@@ -72,28 +75,31 @@ public class Client {
 		port = Integer.parseInt(terminalInput.readLine());
 	}
 
-	public void handleTerminalInput(PrintWriter writer, ServerInputHandler serverInputHandler) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	public void handleTerminalInput(ServerInputHandler serverInputHandler) throws IOException {
+		BufferedReader terminalReader = new BufferedReader(new InputStreamReader(System.in));
 		boolean running = true;
 		while (running) {
-			String input = reader.readLine();
+			String input = terminalReader.readLine();
 			String[] parsedInput = input.split(" ");
 			if (parsedInput.length >= 1 && parsedInput[0].equals(Protocol.DISCONNECT)) {
-				writer.println(input);
-				writer.flush();
+				writeToServer(input);
 				running = false;
 				serverInputHandler.stopRunning();
 				writer.close();
+				terminalReader.close();
 				reader.close();
 			} else {
-				writer.println(input);
-				writer.flush();
+				writeToServer(input);
 			}
 		}
 	}
 
-	public void connect(PrintWriter writer) {
-		writer.println(Protocol.CONNECT + " " + name);
+	public void connect() {
+		writeToServer(Protocol.CONNECT + " " + name);
+	}
+	
+	public void writeToServer(String msg) {
+		writer.println(msg);
 		writer.flush();
 	}
 }

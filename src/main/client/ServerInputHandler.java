@@ -7,12 +7,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ServerInputHandler extends Thread {
-	private Socket socket;
 	private BufferedReader input;
 	private boolean running;
 
-	public ServerInputHandler(Socket sock, BufferedReader reader) throws IOException {
-		socket = sock;
+	public ServerInputHandler(BufferedReader reader) throws IOException {
 		input = reader;
 	}
 
