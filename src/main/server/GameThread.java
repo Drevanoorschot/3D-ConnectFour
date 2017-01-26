@@ -31,7 +31,7 @@ public class GameThread extends Thread {
 	public void run() {
 		System.out.println(toString() + " started");
 		broadcast(Protocol.START + " " + clientThread1.getClientName() + " " + clientThread2.getClientName());
-		while (!board.gameOver() || !disconnect) {
+		while (!board.gameOver() && !disconnect) {
 			boolean moveMade = false;
 			while (!moveMade) {
 				try {
@@ -50,25 +50,27 @@ public class GameThread extends Thread {
 				} catch (IllegalMoveException | InterruptedException e) {
 					this.determineTurn().writeToClient(e.getMessage());
 					moveMade = false;
+				} catch (PlayerDisconnectException e) {
+					if (disconnectedThread == clientThread1) {
+						broadcast(Protocol.END_WINNER + " " + clientThread2.getClientName());
+						System.out.println(toString() + " is won by " + clientThread2.getClientName());
+					} else {
+						broadcast(Protocol.END_WINNER + " " + clientThread1.getClientName());
+						System.out.println(toString() + " is won by " + clientThread1.getClientName());
+					}
 				}
 			}
 		}
-		try {
-			broadcast(Protocol.END_WINNER + " " + getWinner().getClientName());
-			System.out.println(toString() + " won by " + getWinner().getClientName());
-		} catch (InternalErrorException e) {
-			if (!disconnect) {
+		if (!disconnect) {
+			try {
+				broadcast(Protocol.END_WINNER + " " + getWinner().getClientName());
+				System.out.println(toString() + " won by " + getWinner().getClientName());
+			} catch (InternalErrorException e) {
 				broadcast(Protocol.END_DRAW);
 				System.out.println(toString() + " ended in a draw");
-			} else {
-				try {
-					throw new PlayerDisconnectException();
-				} catch (PlayerDisconnectException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 		}
+
 	}
 
 	public ClientThread determineTurn() {
@@ -80,9 +82,13 @@ public class GameThread extends Thread {
 		}
 	}
 
-	public Integer[] makeMove(ClientThread ct) throws IllegalMoveException, InterruptedException {
-		while (ct.getMoveBuffer() == null) {
+	public Integer[] makeMove(ClientThread ct)
+			throws IllegalMoveException, InterruptedException, PlayerDisconnectException {
+		while (ct.getMoveBuffer() == null && !disconnect) {
 			sleep(500);
+		}
+		if (disconnect) {
+			throw new PlayerDisconnectException();
 		}
 		Integer[] coords = ct.getMoveBuffer();
 		for (Integer coord : coords) {

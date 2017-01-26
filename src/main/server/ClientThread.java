@@ -68,7 +68,9 @@ public class ClientThread extends Thread {
 						}
 					} else {
 						throw new UnknownMethodException();
-					}
+					} 
+				} else {
+					disconnect();
 				}
 			} catch (IOException e) {
 				System.out.println("IO - exception in run. Unexpected disconnect by" + this.getName()
