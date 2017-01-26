@@ -2,6 +2,7 @@ package main.server;
 
 import exceptions.generalErrors.InternalErrorException;
 import exceptions.serverErrors.IllegalMoveException;
+import exceptions.serverErrors.PlayerDisconnectException;
 import main.Protocol;
 import model.Board;
 import model.Mark;
@@ -12,6 +13,8 @@ public class GameThread extends Thread {
 	private Board board;
 	private int playerAmount;
 	private int turn = 0;
+	private boolean disconnect;
+	private ClientThread disconnectedThread;
 
 	public GameThread(ClientThread ct1, ClientThread ct2) {
 		clientThread1 = ct1;
@@ -22,32 +25,49 @@ public class GameThread extends Thread {
 		clientThread2.setGameThread(this);
 		board = new Board();
 		playerAmount = 2;
+		disconnect = false;
 	}
 
 	public void run() {
-		broadcast(Protocol.START + " " 
-			+ clientThread1.getClientName() 
-			+ " " + clientThread2.getClientName());
-		while (!board.gameOver()) {
+		System.out.println(toString() + " started");
+		broadcast(Protocol.START + " " + clientThread1.getClientName() + " " + clientThread2.getClientName());
+		while (!board.gameOver() || !disconnect) {
 			boolean moveMade = false;
 			while (!moveMade) {
 				try {
 					moveMade = true;
-					int[] coords = makeMove(this.determineTurn());
+					Integer[] coords = makeMove(this.determineTurn());
 					String ctMadeMove = this.determineTurn().getClientName();
 					turn++;
 					String ctNextMove = this.determineTurn().getClientName();
-					broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " "  
-							+ coords[0] + " " + coords[1] + " " + ctNextMove);
+					if (!board.gameOver()) {
+						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1] + " "
+								+ ctNextMove);
+					} else {
+						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1]);
+					}
+
 				} catch (IllegalMoveException | InterruptedException e) {
 					this.determineTurn().writeToClient(e.getMessage());
+					moveMade = false;
 				}
 			}
 		}
 		try {
 			broadcast(Protocol.END_WINNER + " " + getWinner().getClientName());
+			System.out.println(toString() + " won by " + getWinner().getClientName());
 		} catch (InternalErrorException e) {
-			broadcast(Protocol.END_DRAW);
+			if (!disconnect) {
+				broadcast(Protocol.END_DRAW);
+				System.out.println(toString() + " ended in a draw");
+			} else {
+				try {
+					throw new PlayerDisconnectException();
+				} catch (PlayerDisconnectException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -60,12 +80,12 @@ public class GameThread extends Thread {
 		}
 	}
 
-	public int[] makeMove(ClientThread ct) throws IllegalMoveException, InterruptedException {
-		if (ct.getMoveBuffer().equals(null)) {
-			wait();
+	public Integer[] makeMove(ClientThread ct) throws IllegalMoveException, InterruptedException {
+		while (ct.getMoveBuffer() == null) {
+			sleep(500);
 		}
-		int[] coords = ct.getMoveBuffer(); 
-		for (int coord : coords) {
+		Integer[] coords = ct.getMoveBuffer();
+		for (Integer coord : coords) {
 			if (coord >= board.getDIM() || coord < 0) {
 				throw new IllegalMoveException();
 			}
@@ -85,9 +105,19 @@ public class GameThread extends Thread {
 			throw new InternalErrorException();
 		}
 	}
-	
+
 	public void broadcast(String msg) {
 		clientThread1.writeToClient(msg);
 		clientThread2.writeToClient(msg);
+	}
+
+	public String toString() {
+		return "game " + clientThread1.getClientName() + " " + clientThread2.getClientName();
+	}
+
+	public void setDisconnect(boolean disc, ClientThread ct) {
+		this.disconnect = disc;
+		this.disconnectedThread = ct;
+
 	}
 }

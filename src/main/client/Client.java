@@ -13,7 +13,12 @@ import main.Protocol;
 
 public class Client {
 
-	public static final String EXIT = "exit";
+	public static final String HELP = "HELP";
+	public static final String GIVEHELP = "List of commands:\n"
+			+ "DISCONNECT: disconnect from server and exit\n"
+			+ "PLAYERS ALL: get list of players that are connected to server\n"
+			+ "GAME READY: notify server you are ready to play a game\n"
+			+ "GAME UNREADY: notify server that you are not ready anymore to play a game\n";
 
 	private String name;
 	private int port;
@@ -21,6 +26,8 @@ public class Client {
 	private Socket sock;
 	private BufferedReader reader;
 	private PrintWriter writer;
+	private BufferedReader terminalReader;
+	private ServerInputHandler serverInputHandler;
 
 	public static void main(String[] args) {
 		Client client = new Client();
@@ -52,9 +59,9 @@ public class Client {
 			}
 		}
 		try {
-			ServerInputHandler serverInputHandler = new ServerInputHandler(client.reader);
-			serverInputHandler.start();
-			client.handleTerminalInput(serverInputHandler);
+			client.serverInputHandler = new ServerInputHandler(client.reader);
+			client.serverInputHandler.start();
+			client.handleTerminalInput();
 		} catch (IOException e) {
 			System.out.println("IO exception in main client");
 		}
@@ -75,8 +82,8 @@ public class Client {
 		port = Integer.parseInt(terminalInput.readLine());
 	}
 
-	public void handleTerminalInput(ServerInputHandler serverInputHandler) throws IOException {
-		BufferedReader terminalReader = new BufferedReader(new InputStreamReader(System.in));
+	public void handleTerminalInput() throws IOException {
+		terminalReader = new BufferedReader(new InputStreamReader(System.in));
 		boolean running = true;
 		while (running) {
 			String input = terminalReader.readLine();
@@ -84,14 +91,20 @@ public class Client {
 			if (parsedInput.length >= 1 && parsedInput[0].equals(Protocol.DISCONNECT)) {
 				writeToServer(input);
 				running = false;
-				serverInputHandler.stopRunning();
-				writer.close();
-				terminalReader.close();
-				reader.close();
+				disconnect();
+			} else if (parsedInput.length >= 1 && parsedInput[0].equals(HELP)) {
+				System.out.println(GIVEHELP);
 			} else {
 				writeToServer(input);
 			}
 		}
+	}
+
+	public void disconnect() throws IOException {
+		serverInputHandler.stopRunning();
+		writer.close();
+		terminalReader.close();
+		reader.close();
 	}
 
 	public void connect() {

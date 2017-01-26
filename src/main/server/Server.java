@@ -3,6 +3,7 @@ package main.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketOptions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class Server {
 			server.checkArguments(args);
 			server.setPort(args[0]);
 			server.serverSocket = new ServerSocket(server.port);
+			server.serverSocket.setSoTimeout(500);
 		} catch (InvalidInputException | IOException e) {
 			System.out.println(e.getMessage());
 			System.exit(0);
@@ -43,12 +45,11 @@ public class Server {
 				Socket socket = server.serverSocket.accept();
 				Thread clientThread = new ClientThread(socket, server);
 				clientThread.start();
-				if (server.getReadyClients().size() >= 2) {
-					server.startGame();
-					
-				}
 			} catch (IOException e) {
-				System.out.println("IO exception occured");
+				//do nothing, it is thrown for timeouts to keep threads running.
+			}
+			if (server.getReadyClients().size() >= 2) {
+				server.startGame();
 			}
 		}
 	}
