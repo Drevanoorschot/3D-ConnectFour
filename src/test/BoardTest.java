@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import model.Board;
 import model.Mark;
+import view.TUI;
 
 public class BoardTest {
 	private Board board;
@@ -17,6 +18,7 @@ public class BoardTest {
 	
 	@Test
 	public void testHasRow() {
+		TUI tui = new TUI(board);
 		board.setField(1, 0, Mark.O);
 		board.setField(2, 0, Mark.O);
 		board.setField(3, 0, Mark.O);
@@ -26,6 +28,7 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasCol() {
+		TUI tui = new TUI(board);
 		board.setField(0, 1, Mark.O);
 		board.setField(0, 2, Mark.O);
 		board.setField(0, 3, Mark.O);
@@ -35,6 +38,7 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasHeight() {
+		TUI tui = new TUI(board);
 		board.setField(0, 0, Mark.O);
 		board.setField(0, 0, Mark.O);
 		board.setField(0, 0, Mark.O);
@@ -44,6 +48,7 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasRowColumn() {
+		TUI tui = new TUI(board);
 		board.setField(1, 1, Mark.O);
 		board.setField(2, 2, Mark.O);
 		board.setField(3, 3, Mark.O);
@@ -60,11 +65,18 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasRowHeight() {
+		TUI tui = new TUI(board);
 		board.setField(1, 2, Mark.O);
 		board.setField(2, 2, Mark.O);
 		board.setField(3, 2, Mark.O);
 		assertFalse(board.hasRowHeight(Mark.O));
 		board.setField(0, 2, Mark.O);
+		board.setField(1, 2, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(3, 2, Mark.O);
+		board.setField(3, 2, Mark.O);
+		board.setField(3, 2, Mark.O);
 		assertTrue(board.hasRowHeight(Mark.O));
 		board.reset();
 		board.setField(0, 3, Mark.O);
@@ -72,15 +84,28 @@ public class BoardTest {
 		board.setField(2, 3, Mark.O);
 		assertFalse(board.hasRowHeight(Mark.O));
 		board.setField(3, 3, Mark.O);
+		board.setField(1, 3, Mark.O);
+		board.setField(2, 3, Mark.O);
+		board.setField(2, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
 		assertTrue(board.hasRowHeight(Mark.O));
 	}
 	@Test
 	public void testHasColumnHeight() {
+		TUI tui = new TUI(board);
 		board.setField(3, 1, Mark.O);
 		board.setField(3, 2, Mark.O);
 		board.setField(3, 3, Mark.O);
 		assertFalse(board.hasColumnHeight(Mark.O));
 		board.setField(3, 0, Mark.O);
+		board.setField(3, 1, Mark.O);
+		board.setField(3, 2, Mark.O);
+		board.setField(3, 2, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
 		assertTrue(board.hasColumnHeight(Mark.O));
 		board.reset();
 		board.setField(2, 0, Mark.O);
@@ -88,41 +113,75 @@ public class BoardTest {
 		board.setField(2, 2, Mark.O);
 		assertFalse(board.hasColumnHeight(Mark.O));
 		board.setField(2, 3, Mark.O);
+		board.setField(2, 1, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(2, 3, Mark.O);
+		board.setField(2, 3, Mark.O);
+		board.setField(2, 3, Mark.O);
 		assertTrue(board.hasColumnHeight(Mark.O));
 	}
 	@Test
 	public void testHasDiagTopLeft() {
+		TUI tui = new TUI(board);
 		board.setField(0, 0, Mark.O);
 		board.setField(1, 1, Mark.O);
 		board.setField(2, 2, Mark.O);
 		assertFalse(board.hasRowColumnHeight(Mark.O));
 		board.setField(3, 3, Mark.O);
+		board.setField(1, 1, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
 		assertTrue(board.hasRowColumnHeight(Mark.O));
 	}
 	@Test
 	public void testHasDiagBottomRight() {
+		TUI tui = new TUI(board);
 		board.setField(0, 3, Mark.O);
 		board.setField(1, 2, Mark.O);
 		board.setField(2, 1, Mark.O);
 		assertFalse(board.hasRowColumnHeight(Mark.O));
+		board.setField(3, 0, Mark.O);
+		board.setField(1, 2, Mark.O);
+		board.setField(2, 1, Mark.O);
+		board.setField(2, 1, Mark.O);
+		board.setField(3, 0, Mark.O);
+		board.setField(3, 0, Mark.O);
 		board.setField(3, 0, Mark.O);
 		assertTrue(board.hasRowColumnHeight(Mark.O));
 	}
 	@Test
 	public void testHasDiagBottomLeft() {
+		TUI tui = new TUI(board);
 		board.setField(3, 0, Mark.O);
 		board.setField(2, 1, Mark.O);
 		board.setField(1, 2, Mark.O);
 		assertFalse(board.hasRowColumnHeight(Mark.O));
 		board.setField(0, 3, Mark.O);
+		board.setField(2, 1, Mark.O);
+		board.setField(1, 2, Mark.O);
+		board.setField(1, 2, Mark.O);
+		board.setField(0, 3, Mark.O);
+		board.setField(0, 3, Mark.O);
+		board.setField(0, 3, Mark.O);
 		assertTrue(board.hasRowColumnHeight(Mark.O));
 	}
 	@Test
 	public void testHasDiagTopRight() {
+		TUI tui = new TUI(board);
 		board.setField(0, 0, Mark.O);
 		board.setField(1, 1, Mark.O);
 		board.setField(2, 2, Mark.O);
 		assertFalse(board.hasRowColumnHeight(Mark.O));
+		board.setField(3, 3, Mark.O);
+		board.setField(1, 1, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(2, 2, Mark.O);
+		board.setField(3, 3, Mark.O);
+		board.setField(3, 3, Mark.O);
 		board.setField(3, 3, Mark.O);
 		assertTrue(board.hasRowColumnHeight(Mark.O));
 	}
