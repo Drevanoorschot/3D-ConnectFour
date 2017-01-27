@@ -1,8 +1,5 @@
 package controller.players;
 
-import java.io.BufferedReader;
-import java.io.PipedReader;
-
 import model.Mark;
 
 public class OnlinePlayer extends Player {

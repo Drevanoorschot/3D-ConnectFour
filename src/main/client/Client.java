@@ -55,7 +55,7 @@ public class Client {
 				client.writer = 
 						new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
 				client.connect();
-				if (!client.reader.readLine().equals(Protocol.CONFIRM)) {
+				if (!client.reader.readLine().startsWith(Protocol.CONFIRM)) {
 					throw new UserAlreadyConnectedException();
 				} else {
 					infoReady = true;

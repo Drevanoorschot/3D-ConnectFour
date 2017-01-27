@@ -64,6 +64,7 @@ public class Game extends Thread {
 			throws IndexOutOfBoundsException, InterruptedException {
 		if (player instanceof OnlinePlayer) {
 			OnlinePlayer onlinePlayer = (OnlinePlayer) player;
+			System.out.println("Waiting for opponents move...");
 			while (onlinePlayer.getMoveBuffer() == -1) {
 				sleep(100);
 			}

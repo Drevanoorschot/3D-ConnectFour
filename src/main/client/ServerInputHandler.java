@@ -51,7 +51,10 @@ public class ServerInputHandler extends Thread {
 							move[1] = Integer.parseInt(parsedText[4]);
 							opponent.setMoveBuffer(move);
 						}
-					} else {
+					} else if (rawText.startsWith(Protocol.END_WINNER) || rawText.startsWith(Protocol.END_DRAW)) {
+						//ignore, the client is up to date with server so already knows this info
+					}
+					else {
 						System.out.println(rawText);
 					}
 				}

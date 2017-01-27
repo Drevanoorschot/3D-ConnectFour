@@ -3,7 +3,7 @@ package model;
 import java.util.Observable;
 
 public class Board extends Observable {
-	private static final int DIM = 7;
+	private static final int DIM = 4;
 	private Mark[][][] fields;
 
 	public Board() {
