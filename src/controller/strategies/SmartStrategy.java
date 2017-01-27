@@ -40,7 +40,7 @@ public class SmartStrategy extends Strategy {
 		}
 		// for all possible moves, check if the move you're going to make
 		// creates a win condition for the enemy
-		List<int[]> safeMoves = new ArrayList<>();
+		List<int[]> safeMoves = new ArrayList<int[]>();
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
 			temp.setField(myList.get(i)[0], myList.get(i)[1], m);
