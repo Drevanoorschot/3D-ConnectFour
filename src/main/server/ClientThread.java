@@ -9,10 +9,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import exceptions.generalErrors.IllegalMethodSyntaxException;
 import exceptions.generalErrors.UnknownMethodException;
 import exceptions.serverErrors.IllegalMethodUseException;
 import exceptions.serverErrors.UserAlreadyConnectedException;
 import main.Protocol;
+import model.Mark;
 
 public class ClientThread extends Thread {
 	private Socket socket;
@@ -22,12 +24,17 @@ public class ClientThread extends Thread {
 	private String name;
 	private BufferedReader reader;
 	private PrintWriter writer;
+	private Mark mark;
+	private Integer[] moveBuffer;
+
+	private ServerGameThread gameThread;
 
 	public ClientThread(Socket s, Server svr) throws IOException {
 		socket = s;
 		input = socket.getInputStream();
 		output = socket.getOutputStream();
 		server = svr;
+		moveBuffer = null;
 	}
 
 	@Override
@@ -38,30 +45,42 @@ public class ClientThread extends Thread {
 		boolean running = true;
 		while (running) {
 			try {
-				String[] text = reader.readLine().split(" ");
-				if (text.length >= 2 && text[0].equals(Protocol.CONNECT)) {
-					connect(text);
-				} else if (text.length == 1 && text[0].equals(Protocol.DISCONNECT)) {
-					disconnect();
-					running = false;
-				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.READY)) {
-					readyClient();
-				} else if (text.length == 2 && (text[0] + " " + text[1]).equals(Protocol.UNREADY)){
-					unReadyClient();
-				} else if (text.length  == 2 && (text[0] + " " + text[1]).equals(Protocol.ASK_PLAYERS_ALL)) {
-					writePlayersAll();
+				String rawText = reader.readLine();
+				if (rawText != null) {
+					String[] text = rawText.split(" ");
+					if (text.length >= 2 && text[0].equals(Protocol.CONNECT)) {
+						connect(text);
+					} else if (text.length == 1 && text[0].equals(Protocol.DISCONNECT)) {
+						disconnect();
+						running = false;
+					} else if (text.length == 2 && rawText.equals(Protocol.READY)) {
+						readyClient();
+					} else if (text.length == 2 && rawText.equals(Protocol.UNREADY)) {
+						unReadyClient();
+					} else if (text.length == 2 && rawText.equals(Protocol.ASK_PLAYERS_ALL)) {
+						writePlayersAll();
+					} else if (text.length == 4 && rawText.startsWith(Protocol.CLIENT_MOVE)) {
+						if (gameThread != null && gameThread.determineTurn().equals(this)) {
+							doMove(text);
+						} else {
+							throw new IllegalMethodUseException(
+									"possible causes:\n" + "- not in game\n" + "- not your turn");
+						}
+					} else {
+						throw new UnknownMethodException();
+					} 
 				} else {
-					throw new UnknownMethodException();
+					disconnect();
 				}
-				
 			} catch (IOException e) {
-				System.out.println("IO - exception in run. Unexpected disconnect.\n"
-						+ " Terminating ClientThread...");
+				System.out.println("IO - exception in run. Unexpected disconnect by" + this.getName()
+						+ ".\n Terminating ClientThread...");
 				try {
 					disconnect();
 					running = false;
 				} catch (IllegalMethodUseException e1) {
-					//do nothing (unexpected behaviour already occured an is repported to server)
+					// do nothing (unexpected behaviour already occured an is
+					// repported to server)
 				}
 				running = false;
 			} catch (UserAlreadyConnectedException e) {
@@ -70,6 +89,13 @@ public class ClientThread extends Thread {
 				running = false;
 			} catch (IllegalMethodUseException | UnknownMethodException e) {
 				writeToClient(e.getMessage());
+			} catch (NumberFormatException e) {
+				try {
+					moveBuffer = null;
+					throw new IllegalMethodSyntaxException();
+				} catch (IllegalMethodSyntaxException e1) {
+					writeToClient(e1.getMessage());
+				}
 			}
 		}
 
@@ -91,9 +117,12 @@ public class ClientThread extends Thread {
 			throw new UserAlreadyConnectedException();
 		}
 	}
-	
+
 	public void disconnect() throws IllegalMethodUseException {
 		if (server.getConnectedClients().contains(this)) {
+			if (gameThread != null) {
+				gameThread.setDisconnect(true, this);
+			}
 			server.getConnectedClients().remove(this);
 			server.getReadyClients().remove(this);
 			System.out.println(name + " disconnected");
@@ -102,7 +131,7 @@ public class ClientThread extends Thread {
 			throw new IllegalMethodUseException("You are not (properly) connected");
 		}
 	}
-	
+
 	public void readyClient() throws IllegalMethodUseException {
 		if (!server.getConnectedClients().contains(this)) {
 			throw new IllegalMethodUseException("You are not (properly) connected");
@@ -115,7 +144,7 @@ public class ClientThread extends Thread {
 			writeToClient("You are now ready to play a game");
 		}
 	}
-	
+
 	public void unReadyClient() throws IllegalMethodUseException {
 		if (server.getReadyClients().contains(this)) {
 			server.getReadyClients().remove(this);
@@ -125,24 +154,47 @@ public class ClientThread extends Thread {
 			throw new IllegalMethodUseException("You weren't ready so unready couldn't be invoked");
 		}
 	}
-	
-	private void writePlayersAll() {
+
+	public void doMove(String[] text) throws NumberFormatException {
+		moveBuffer = new Integer[2];
+		moveBuffer[0] = Integer.parseInt(text[2]);
+		moveBuffer[1] = Integer.parseInt(text[3]);
+	}
+
+	public void writePlayersAll() {
 		String players = Protocol.RES_PLAYERS_ALL;
 		for (ClientThread ct : server.getConnectedClients()) {
 			players = players + " " + ct.getClientName();
 		}
 		writeToClient(players);
 	}
-	
+
 	public String getClientName() {
 		return name;
 	}
-	
+
+	public Mark getMark() {
+		return mark;
+	}
+
+	public Integer[] getMoveBuffer() {
+		return moveBuffer;
+	}
+
+	public void setMoveBuffer(Integer[] moveBuffer) {
+		this.moveBuffer = moveBuffer;
+	}
+
+	public void setMark(Mark mark) {
+		this.mark = mark;
+	}
+
+	public void setGameThread(ServerGameThread gameThread) {
+		this.gameThread = gameThread;
+	}
+
 	public void writeToClient(String msg) {
 		writer.println(msg);
 		writer.flush();
 	}
-	
-	
-
 }

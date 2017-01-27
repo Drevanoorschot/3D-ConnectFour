@@ -80,7 +80,6 @@ public class TUI implements Observer {
 		} else if (board.getField(col, row, height) == Mark.X) {
 			return CROSS;
 		}
-
 		return EMPTY;
 	}
 
