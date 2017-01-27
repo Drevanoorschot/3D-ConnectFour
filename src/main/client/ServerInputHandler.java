@@ -37,6 +37,7 @@ public class ServerInputHandler extends Thread {
 							opponent = new OnlinePlayer(Mark.X, parsedText[3]);
 							gameThread = new Game(client.getPlayer(), opponent, false);
 							gameThread.setClient(client);
+							client.setHasTurn(true);
 							gameThread.start();
 						} else {
 							opponent = new OnlinePlayer(Mark.X, parsedText[2]);
@@ -50,9 +51,12 @@ public class ServerInputHandler extends Thread {
 							move[0] = Integer.parseInt(parsedText[3]);
 							move[1] = Integer.parseInt(parsedText[4]);
 							opponent.setMoveBuffer(move);
+							client.setHasTurn(true);
+						} else {
+							client.setHasTurn(false);
 						}
 					} else if (rawText.startsWith(Protocol.END_WINNER) || rawText.startsWith(Protocol.END_DRAW)) {
-						//ignore, the client is up to date with server so already knows this info
+						System.out.println("Game finished. To play another, type GAME READY");
 					}
 					else {
 						System.out.println(rawText);
