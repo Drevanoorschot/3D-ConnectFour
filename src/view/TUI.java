@@ -28,35 +28,34 @@ public class TUI implements Observer {
 		graphicBoard = "";
 		// HACK: (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2 calculates how many 
 		// spaces does layer i need to its left and its right for it 
-		// to be centered around it's board
+		// to be centered on top of its board
 		for(int i = 0; i < brd.getDIM(); i++) {
 			for(int j = 0; j < (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2; j++) {
-				graphicBoard = graphicBoard + " ";
-			}
+					graphicBoard = graphicBoard + " ";
+				}
 			graphicBoard = graphicBoard + "layer " + i;
 			for(int j = 0; j < (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2; j++) {
-				graphicBoard = graphicBoard + " ";
+					graphicBoard = graphicBoard + " ";
+				}
+			graphicBoard = graphicBoard + "  ";	
 			}
-			graphicBoard = graphicBoard + "  ";
-			
-		}
 		graphicBoard = graphicBoard + "\n";
 		for(int k = 0; k < brd.getDIM(); k++) {
 			for(int i = 0; i < brd.getDIM(); i++) {
 				for(int j = 0; j < brd.getDIM(); j++) {
-					graphicBoard = graphicBoard + "+---";
-				}
+						graphicBoard = graphicBoard + "+---";
+					}
 				graphicBoard = graphicBoard + "+  ";
-			}
-			graphicBoard = graphicBoard + "\n";
-			for(int i = 0; i < brd.getDIM(); i++) {
-				for(int j = 0; j < brd.getDIM(); j++) {
-					graphicBoard = graphicBoard + "|" + fieldToString(c,r,h);
-					c++;
 				}
-			h++;
-			c = 0;
-			graphicBoard = graphicBoard + "|  "; 
+				graphicBoard = graphicBoard + "\n";
+				for(int i = 0; i < brd.getDIM(); i++) {
+					for(int j = 0; j < brd.getDIM(); j++) {
+						graphicBoard = graphicBoard + "|" + fieldToString(c,r,h);
+						c++;
+					}
+				h++;
+				c = 0;
+				graphicBoard = graphicBoard + "|  "; 
 			}
 			graphicBoard = graphicBoard + "\n";
 			h = 0;
