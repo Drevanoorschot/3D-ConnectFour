@@ -44,7 +44,6 @@ public class SmartStrategy extends Strategy {
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
 			temp.setField(myList.get(i)[0], myList.get(i)[1], m);
-			if (!temp.isFull()) {
 				List<int[]> futureList = getPossibleMoves(temp);
 				boolean valid = true;
 				for (int j = 0; j < futureList.size(); j++) {
@@ -52,13 +51,12 @@ public class SmartStrategy extends Strategy {
 					if (temp.isWinner(m.next(m))) {
 						valid = false;
 					}
+				}
 					if (valid) {
 						safeMoves.add(myList.get(i));
 					}
-				}
 			}
-		}
-		if (safeMoves.size() < 1) {
+		if(safeMoves.size() < 1) {
 			return randomMove();
 		} else {
 			return (safeMoves.get((int) Math.random() * safeMoves.size()));
