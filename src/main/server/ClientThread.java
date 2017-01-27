@@ -27,7 +27,7 @@ public class ClientThread extends Thread {
 	private Mark mark;
 	private Integer[] moveBuffer;
 
-	private GameThread gameThread;
+	private ServerGameThread gameThread;
 
 	public ClientThread(Socket s, Server svr) throws IOException {
 		socket = s;
@@ -189,7 +189,7 @@ public class ClientThread extends Thread {
 		this.mark = mark;
 	}
 
-	public void setGameThread(GameThread gameThread) {
+	public void setGameThread(ServerGameThread gameThread) {
 		this.gameThread = gameThread;
 	}
 

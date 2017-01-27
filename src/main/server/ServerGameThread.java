@@ -7,7 +7,7 @@ import main.Protocol;
 import model.Board;
 import model.Mark;
 
-public class GameThread extends Thread {
+public class ServerGameThread extends Thread {
 	private ClientThread clientThread1;
 	private ClientThread clientThread2;
 	private Board board;
@@ -16,7 +16,7 @@ public class GameThread extends Thread {
 	private boolean disconnect;
 	private ClientThread disconnectedThread;
 
-	public GameThread(ClientThread ct1, ClientThread ct2) {
+	public ServerGameThread(ClientThread ct1, ClientThread ct2) {
 		clientThread1 = ct1;
 		clientThread2 = ct2;
 		clientThread1.setMark(Mark.X);

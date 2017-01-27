@@ -46,7 +46,7 @@ public class Server {
 				Thread clientThread = new ClientThread(socket, server);
 				clientThread.start();
 			} catch (IOException e) {
-				//do nothing, it is thrown for timeouts to keep threads running.
+				//do nothing, it is thrown for timeouts on the accept to unblock program;
 			}
 			if (server.getReadyClients().size() >= 2) {
 				server.startGame();
@@ -55,7 +55,7 @@ public class Server {
 	}
 
 	public void startGame() {
-		Thread game = new GameThread(getReadyClients().get(0), getReadyClients().get(1));
+		Thread game = new ServerGameThread(getReadyClients().get(0), getReadyClients().get(1));
 		getReadyClients().remove(1);
 		getReadyClients().remove(0);
 		game.start();
