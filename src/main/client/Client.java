@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import controller.players.ComputerPlayer;
-import controller.players.HumanPlayer;
+import controller.players.HumanNetworkPlayer;
 import controller.players.Player;
 import controller.strategies.NaiveStrategy;
 import controller.strategies.SmartStrategy;
@@ -35,9 +35,11 @@ public class Client {
 	private BufferedReader terminalReader;
 	private ServerInputHandler serverInputHandler;
 	private Player player;
+	private boolean hasTurn;
 
 	public Client() {
 		terminalReader = new BufferedReader(new InputStreamReader(System.in));
+		hasTurn = false;
 	}
 
 	public static void main(String[] args) {
@@ -50,10 +52,8 @@ public class Client {
 				client.getConnectionInfo();
 				client.getPlayerInfo();
 				client.sock = new Socket(client.ipAddress, client.port);
-				client.reader = 
-						new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
-				client.writer = 
-						new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
+				client.reader = new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
+				client.writer = new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
 				client.connect();
 				if (!client.reader.readLine().startsWith(Protocol.CONFIRM)) {
 					throw new UserAlreadyConnectedException();
@@ -61,8 +61,8 @@ public class Client {
 					infoReady = true;
 				}
 
-			} catch (IOException e) {
-				System.out.println("An IO-Exception Occured, please enter information again. " + "Possible causes:\n"
+			} catch (IOException | NumberFormatException e){
+				System.out.println("An IO-Exception/NumberFormatException Occured, please enter information again. " + "Possible causes:\n"
 						+ "- incorrect ip address\n" + "- incorrect port number\n");
 			} catch (UserAlreadyConnectedException e) {
 				System.out.println(e.getMessage() + ". Please choose a different username");
@@ -80,7 +80,7 @@ public class Client {
 
 	}
 
-	public void getConnectionInfo() throws IOException {
+	public void getConnectionInfo() throws IOException, NumberFormatException {
 		System.out.println("What is your name?");
 		String[] nameparts = terminalReader.readLine().split(" ");
 		name = "";
@@ -97,18 +97,16 @@ public class Client {
 		System.out.println("Do you wish to play with an AI (1) or by yourself (2)?");
 		String playChoice = terminalReader.readLine();
 		if (playChoice.equals("2")) {
-			player = new HumanPlayer(Mark.O, name);
+			player = new HumanNetworkPlayer(Mark.O, name, terminalReader);
 		} else if (playChoice.equals("1")) {
-			System.out.println(
-					"Do you wish to play with a fast naive AI (1) or slow smart AI (2)?");
+			System.out.println("Do you wish to play with a fast naive AI (1) or slow smart AI (2)?");
 			playChoice = terminalReader.readLine();
 			if (playChoice.equals("1")) {
 				player = new ComputerPlayer(Mark.O, new NaiveStrategy());
 			} else if (playChoice.equals("2")) {
 				player = new ComputerPlayer(Mark.O, new SmartStrategy());
 			} else {
-				throw new InvalidInputException(
-						"Invalid input, please provide a 1 or a 2 as answer");
+				throw new InvalidInputException("Invalid input, please provide a 1 or a 2 as answer");
 			}
 		} else {
 			throw new InvalidInputException("Invalid input, please provide a 1 or a 2 as answer");
@@ -118,16 +116,20 @@ public class Client {
 	public void handleTerminalInput() throws IOException {
 		boolean running = true;
 		while (running) {
-			String input = terminalReader.readLine();
-			String[] parsedInput = input.split(" ");
-			if (parsedInput.length >= 1 && parsedInput[0].equals(Protocol.DISCONNECT)) {
-				writeToServer(input);
-				running = false;
-				disconnect();
-			} else if (parsedInput.length >= 1 && parsedInput[0].equals(HELP)) {
-				System.out.println(GIVEHELP);
-			} else {
-				writeToServer(input);
+			while (!hasTurn) {
+				if (terminalReader.ready()) {
+					String input = terminalReader.readLine();
+					String[] parsedInput = input.split(" ");
+					if (parsedInput.length >= 1 && parsedInput[0].equals(Protocol.DISCONNECT)) {
+						writeToServer(input);
+						running = false;
+						disconnect();
+					} else if (parsedInput.length >= 1 && parsedInput[0].equals(HELP)) {
+						System.out.println(GIVEHELP);
+					} else {
+						writeToServer(input);
+					}
+				}
 			}
 		}
 	}
@@ -151,8 +153,16 @@ public class Client {
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	public String getName() {
 		return name;
+	}
+
+	public boolean isHasTurn() {
+		return hasTurn;
+	}
+
+	public void setHasTurn(boolean hasTurn) {
+		this.hasTurn = hasTurn;
 	}
 }
