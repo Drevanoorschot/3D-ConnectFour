@@ -13,7 +13,7 @@ public class Connect4 {
 
 		Player player1 = new ComputerPlayer(Mark.O, new SmartStrategy());
 		Player player2 = new ComputerPlayer(Mark.X, new SmartStrategy());
-		Game game = new Game(player2, player1);
+		Game game = new Game(player2, player1, true);
 		game.run();
 	}
 }

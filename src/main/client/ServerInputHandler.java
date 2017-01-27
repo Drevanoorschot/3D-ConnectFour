@@ -35,12 +35,12 @@ public class ServerInputHandler extends Thread {
 					if (parsedText.length >= 4 && rawText.startsWith(Protocol.START)) {
 						if (parsedText[2].equals(client.getName())) {
 							opponent = new OnlinePlayer(Mark.X, parsedText[3]);
-							gameThread = new Game(client.getPlayer(), opponent);
+							gameThread = new Game(client.getPlayer(), opponent, false);
 							gameThread.setClient(client);
 							gameThread.start();
 						} else {
 							opponent = new OnlinePlayer(Mark.X, parsedText[2]);
-							gameThread = new Game(opponent, client.getPlayer());
+							gameThread = new Game(opponent, client.getPlayer(), false);
 							gameThread.setClient(client);
 							gameThread.start();
 						}

@@ -20,8 +20,9 @@ public class Game extends Thread {
 	private int turn;
 	private int playerAmount;
 	private Client client;
+	private boolean local;
 
-	public Game(Player p1, Player p2) {
+	public Game(Player p1, Player p2, boolean loc) {
 		player1 = p1;
 		player2 = p2;
 		board = new Board();
@@ -35,6 +36,7 @@ public class Game extends Thread {
 		}
 		turn = 0;
 		playerAmount = 2;
+		local = loc;
 	}
 
 	public void run() {
@@ -79,7 +81,7 @@ public class Game extends Thread {
 			reset[0] = -1;
 			OnlinePlayer onlinePlayer = (OnlinePlayer) player;
 			onlinePlayer.setMoveBuffer(reset);
-		} else {
+		} else if (!local) {
 			client.writeToServer(Protocol.CLIENT_MOVE + " " + coords[0] + " " + coords[1]);
 		}
 	}
