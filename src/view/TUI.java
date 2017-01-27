@@ -20,73 +20,55 @@ public class TUI implements Observer {
 	}
 
 	public String boardToString(Board brd) {
-		int h = 0;
-		int r = 0;
+		int h = 0; //height
+		int r = 0; //row
+		int c = 0; //column
+		int l = 0; //layer
+		final int layerLength = "layer  ".length();
 		graphicBoard = "";
-		graphicBoard = graphicBoard + "     layer 0             layer 1    \n";
-		for (int j = 0; j < brd.getDIM(); j++) {
-			for (int i = 0; i < brd.getDIM(); i++) {
-				graphicBoard = graphicBoard + "+---";
+		// HACK: (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2 calculates how many 
+		// spaces does layer i need to its left and its right for it 
+		// to be centered around it's board
+		for(int i = 0; i < brd.getDIM(); i++) {
+			for(int j = 0; j < (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2; j++) {
+				graphicBoard = graphicBoard + " ";
 			}
-			graphicBoard = graphicBoard + "+  ";
-			for (int i = 0; i < brd.getDIM(); i++) {
-				graphicBoard = graphicBoard + "+---";
+			graphicBoard = graphicBoard + "layer " + i;
+			for(int j = 0; j < (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2; j++) {
+				graphicBoard = graphicBoard + " ";
 			}
-			graphicBoard = graphicBoard + "+\n";
-			for (int c = 0; c < brd.getDIM(); c++) {
-				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
-			}
-			h++;
-			graphicBoard = graphicBoard + "|  ";
-			for (int c = 0; c < brd.getDIM(); c++) {
-				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
-			}
-			h--;
-			graphicBoard = graphicBoard + "|\n";
-			r++;
-			r = r % brd.getDIM();
+			graphicBoard = graphicBoard + "  ";
+			
 		}
-		for (int i = 0; i < brd.getDIM(); i++) {
-			graphicBoard = graphicBoard + "+---";
-		}
-		graphicBoard = graphicBoard + "+  ";
-		for (int i = 0; i < brd.getDIM(); i++) {
-			graphicBoard = graphicBoard + "+---";
-		}
-		graphicBoard = graphicBoard + "+\n";
 		graphicBoard = graphicBoard + "\n";
-		h = 2;
-		graphicBoard = graphicBoard + "     layer 2             layer 3   \n";
-		for (int j = 0; j < brd.getDIM(); j++) {
-			for (int i = 0; i < brd.getDIM(); i++) {
+		for(int k = 0; k < brd.getDIM(); k++) {
+			for(int i = 0; i < brd.getDIM(); i++) {
+				for(int j = 0; j < brd.getDIM(); j++) {
+					graphicBoard = graphicBoard + "+---";
+				}
+				graphicBoard = graphicBoard + "+  ";
+			}
+			graphicBoard = graphicBoard + "\n";
+			for(int i = 0; i < brd.getDIM(); i++) {
+				for(int j = 0; j < brd.getDIM(); j++) {
+					graphicBoard = graphicBoard + "|" + fieldToString(c,r,h);
+					c++;
+				}
+			h++;
+			c = 0;
+			graphicBoard = graphicBoard + "|  "; 
+			}
+			graphicBoard = graphicBoard + "\n";
+			h = 0;
+			r++;
+		}
+		for(int i = 0; i < brd.getDIM(); i++) {
+			for(int j = 0; j < brd.getDIM(); j++) {
 				graphicBoard = graphicBoard + "+---";
 			}
 			graphicBoard = graphicBoard + "+  ";
-			for (int i = 0; i < brd.getDIM(); i++) {
-				graphicBoard = graphicBoard + "+---";
-			}
-			graphicBoard = graphicBoard + "+\n";
-			for (int c = 0; c < brd.getDIM(); c++) {
-				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
-			}
-			h++;
-			graphicBoard = graphicBoard + "|  ";
-			for (int c = 0; c < brd.getDIM(); c++) {
-				graphicBoard = graphicBoard + "|" + this.fieldToString(c, r, h);
-			}
-			h--;
-			graphicBoard = graphicBoard + "|\n";
-			r++;
-			r = r % brd.getDIM();
 		}
-		for (int i = 0; i < brd.getDIM(); i++) {
-			graphicBoard = graphicBoard + "+---";
-		}
-		graphicBoard = graphicBoard + "+  ";
-		for (int i = 0; i < brd.getDIM(); i++) {
-			graphicBoard = graphicBoard + "+---";
-		}
-		graphicBoard = graphicBoard + "+\n";
+		graphicBoard = graphicBoard + "\n";
 		return graphicBoard;
 	}
 

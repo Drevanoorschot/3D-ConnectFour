@@ -2,6 +2,7 @@ package controller.players;
 
 import java.util.Scanner;
 
+import controller.SmartStrategy;
 import controller.strategies.NaiveStrategy;
 import controller.strategies.Strategy;
 import exceptions.InvalidInputException;
@@ -65,9 +66,9 @@ public class HumanPlayer extends Player {
 	}
 	
 	public void getHint() {
-		Strategy naive = new NaiveStrategy();
+		Strategy smart = new SmartStrategy();
 		int[] moves = new int[2];
-		moves = naive.generateMove(Mark.EMPTY);
+		moves = smart.generateMove(Mark.EMPTY);
 		System.out.println(
 				"Have you considered the move" + " c:" + moves[0] + ", r:" + moves[1] + "?");
 	}
