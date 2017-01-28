@@ -58,6 +58,9 @@ public class Game extends Thread {
 		} catch (HasNoWinnerException e) {
 			System.out.println("it's a draw!");
 		}
+		if (local == false) {
+			System.out.println("Game finished. To play another, type GAME READY");
+		}
 	}
 
 	public void makeMove(Player player)
@@ -66,7 +69,7 @@ public class Game extends Thread {
 			OnlinePlayer onlinePlayer = (OnlinePlayer) player;
 			System.out.println("Waiting for opponents move...");
 			while (onlinePlayer.getMoveBuffer() == -1) {
-				sleep(100);
+				sleep(1);
 			}
 		}
 		int[] coords = player.determineMove();

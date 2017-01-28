@@ -3,7 +3,6 @@ package main.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketOptions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +34,11 @@ public class Server {
 			server.setPort(args[0]);
 			server.serverSocket = new ServerSocket(server.port);
 			server.serverSocket.setSoTimeout(500);
-		} catch (InvalidInputException | IOException e) {
+		} catch (InvalidInputException e) {
 			System.out.println(e.getMessage());
+			System.exit(0);
+		} catch (IOException e) {
+			System.out.println("port is already in use, please alter run configuration");
 			System.exit(0);
 		}
 		boolean running = true;

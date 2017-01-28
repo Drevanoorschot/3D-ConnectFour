@@ -56,7 +56,7 @@ public class ServerInputHandler extends Thread {
 							client.setHasTurn(false);
 						}
 					} else if (rawText.startsWith(Protocol.END_WINNER) || rawText.startsWith(Protocol.END_DRAW)) {
-						System.out.println("Game finished. To play another, type GAME READY");
+						//do nothing, client is in same state so knows game is over.
 					}
 					else {
 						System.out.println(rawText);

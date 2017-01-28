@@ -58,6 +58,7 @@ public class Client {
 				if (!client.reader.readLine().startsWith(Protocol.CONFIRM)) {
 					throw new UserAlreadyConnectedException();
 				} else {
+					System.out.println("For help, type " + HELP);
 					infoReady = true;
 				}
 
