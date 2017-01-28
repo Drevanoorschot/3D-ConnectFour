@@ -3,7 +3,7 @@ package model;
 import java.util.Observable;
 
 public class Board extends Observable {
-	private static final int DIM = 4; // THEORY: WORKS FOR 100+ DIMENSIONS, HAVE TO LET IT DRAW FOR A LONG TIME + THINKING TIME OF AI
+	private static int DIM = 4; // THEORY: WORKS FOR 100+ DIMENSIONS, HAVE TO LET IT DRAW FOR A LONG TIME + THINKING TIME OF AI
 	private Mark[][][] fields;
 
 	public Board() {
@@ -13,6 +13,10 @@ public class Board extends Observable {
 
 	public int getDIM() {
 		return DIM;
+	}
+	
+	public static void setDIM(int dim) {
+		DIM = dim;
 	}
 
 	public Board deepCopy() {
