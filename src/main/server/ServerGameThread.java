@@ -16,6 +16,10 @@ public class ServerGameThread extends Thread {
 	private boolean disconnect;
 	private ClientThread disconnectedThread;
 
+	//@invariant getClientThread1() != null;
+	//@invariant getClientThread2() != null;
+	//@invariant getBoard() != null;
+	//@invariant getPlayerAmount() == 2;
 	public ServerGameThread(ClientThread ct1, ClientThread ct2) {
 		clientThread1 = ct1;
 		clientThread2 = ct2;
@@ -72,7 +76,7 @@ public class ServerGameThread extends Thread {
 		}
 
 	}
-
+	//@ensures getTurn() >= 0 && getTurn() < getPlayerAmount();
 	public ClientThread determineTurn() {
 		turn = turn % playerAmount;
 		if (turn == 0) {
@@ -81,7 +85,11 @@ public class ServerGameThread extends Thread {
 			return clientThread2;
 		}
 	}
-
+	/*@
+	  requires ct.getMoveBuffer() != null;
+	  ensures (\exists int h; h >= 0 & h < getBoard().getDIM();
+	  getBoard().getField(\result[0], \result[1], h) == ct.getMark());
+	 */
 	public Integer[] makeMove(ClientThread ct)
 			throws IllegalMoveException, InterruptedException, PlayerDisconnectException {
 		while (ct.getMoveBuffer() == null && !disconnect) {
@@ -100,7 +108,9 @@ public class ServerGameThread extends Thread {
 		ct.setMoveBuffer(null);
 		return coords;
 	}
-
+	
+	//@requires getBoard().gameOver();
+	//@pure
 	public ClientThread getWinner() throws InternalErrorException {
 		if (board.isWinner(clientThread1.getMark())) {
 			return clientThread1;
@@ -111,16 +121,50 @@ public class ServerGameThread extends Thread {
 			throw new InternalErrorException();
 		}
 	}
+	
+	//@pure
+	public int getPlayerAmount() {
+		return playerAmount;
+	}
+	//@pure
+	public int getTurn() {
+		return turn;
+	}
+	//@pure
+	public Board getBoard() {
+		return board;
+	}
+	
+	//@pure
+	public ClientThread getClientThread1() {
+		return clientThread1;
+	}
+	
+	//@pure
+	public ClientThread getClientThread2() {
+		return clientThread2;
+	}
+	//@pure
+	public boolean isDisconnect() {
+		return disconnect;
+	}
+	
+	//@pure
+	public ClientThread getDisconnectedThread() {
+		return disconnectedThread;
+	}
 
+	//@pure
 	public void broadcast(String msg) {
 		clientThread1.writeToClient(msg);
 		clientThread2.writeToClient(msg);
 	}
-
+	//@pure
 	public String toString() {
 		return "game " + clientThread1.getClientName() + " " + clientThread2.getClientName();
 	}
-
+	
+	//@ensures isDisconnect() == disc && getDisconnectedThread().equals(ct);
 	public void setDisconnect(boolean disc, ClientThread ct) {
 		this.disconnect = disc;
 		this.disconnectedThread = ct;
