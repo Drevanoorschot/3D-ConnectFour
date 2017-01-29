@@ -18,11 +18,11 @@ public class Server {
 		connectedClients = new ArrayList<ClientThread>();
 		readyClients = new ArrayList<ClientThread>();
 	}
-	
+	//@pure
 	public List<ClientThread> getConnectedClients() {
 		return connectedClients;
 	}
-	
+	//@pure
 	public List<ClientThread> getReadyClients() {
 		return readyClients;
 	}

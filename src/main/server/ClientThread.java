@@ -100,7 +100,13 @@ public class ClientThread extends Thread {
 		}
 
 	}
-
+	/*@
+	requires (\forall ClientThread c; getServer().getConnectedClients().contains(c);
+	 !c.getClientName().equals(text));
+	ensures (\exists ClientThread c; getServer().getConnectedClients().contains(c);
+	 c.getClientName().equals(text));
+	ensures getClientName().equals(text);
+	*/
 	public void connect(String[] text) throws UserAlreadyConnectedException {
 		boolean exists = false;
 		for (ClientThread clientThread : server.getConnectedClients()) {
@@ -117,7 +123,8 @@ public class ClientThread extends Thread {
 			throw new UserAlreadyConnectedException();
 		}
 	}
-
+	//@requires getServer().getConnectedClients().contains(this);
+	//@ensures !getServer().getConnectedClients().contains(this);
 	public void disconnect() throws IllegalMethodUseException {
 		if (server.getConnectedClients().contains(this)) {
 			if (gameThread != null) {
@@ -131,7 +138,9 @@ public class ClientThread extends Thread {
 			throw new IllegalMethodUseException("You are not (properly) connected");
 		}
 	}
-
+	//@requires getServer().getConnectedClients().contains(this);
+	//@requires !getServer().getReadyClients().contains(this);
+	//@ensures getServer().getReadyClients().contains(this);
 	public void readyClient() throws IllegalMethodUseException {
 		if (!server.getConnectedClients().contains(this)) {
 			throw new IllegalMethodUseException("You are not (properly) connected");
@@ -144,7 +153,8 @@ public class ClientThread extends Thread {
 			writeToClient("You are now ready to play a game");
 		}
 	}
-
+	//@requires getServer().getReadyClients().contains(this);
+	//@ensures !getServer().getReadyClients().contains(this);
 	public void unReadyClient() throws IllegalMethodUseException {
 		if (server.getReadyClients().contains(this)) {
 			server.getReadyClients().remove(this);
@@ -154,13 +164,17 @@ public class ClientThread extends Thread {
 			throw new IllegalMethodUseException("You weren't ready so unready couldn't be invoked");
 		}
 	}
-
+	//@requires text.length > 3;
+	//@requires (\exists int i; text[2].equals(i));
+	//@requires (\exists int i; text[3].equals(i));
+	//@ensures !getMoveBuffer()[0].equals(null);
+	//@ensures !getMoveBuffer()[1].equals(null);
 	public void doMove(String[] text) throws NumberFormatException {
 		moveBuffer = new Integer[2];
 		moveBuffer[0] = Integer.parseInt(text[2]);
 		moveBuffer[1] = Integer.parseInt(text[3]);
 	}
-
+	//@pure
 	public void writePlayersAll() {
 		String players = Protocol.RES_PLAYERS_ALL;
 		for (ClientThread ct : server.getConnectedClients()) {
@@ -168,31 +182,46 @@ public class ClientThread extends Thread {
 		}
 		writeToClient(players);
 	}
-
+	
+	//@pure
 	public String getClientName() {
 		return name;
 	}
-
+	
+	//@pure
 	public Mark getMark() {
 		return mark;
 	}
-
+	//@pure
 	public Integer[] getMoveBuffer() {
 		return moveBuffer;
 	}
+	//@pure
+	public Server getServer() {
+		return server;
+	}
+	//@pure
+	public ServerGameThread getGameThread() {
+		return gameThread;
+	}
 
+	//@requires moveBuffer.length == 2;
+	//@ensures moveBuffer.equals(getMoveBuffer());
 	public void setMoveBuffer(Integer[] moveBuffer) {
 		this.moveBuffer = moveBuffer;
 	}
-
+	
+	//@ensures mark.equals(getMark());
 	public void setMark(Mark mark) {
 		this.mark = mark;
 	}
-
+	
+	//@ensures gameThread.equals(getGameThread());
 	public void setGameThread(ServerGameThread gameThread) {
 		this.gameThread = gameThread;
 	}
-
+	
+	//@pure
 	public void writeToClient(String msg) {
 		writer.println(msg);
 		writer.flush();
