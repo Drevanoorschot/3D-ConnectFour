@@ -16,13 +16,43 @@ public class BoardTest {
 	}
 	
 	@Test
+	public void testIsFull() {
+		board.setDIM(2);
+		board.setField(0, 0, Mark.O);
+		board.setField(0, 0, Mark.O);
+		board.setField(0, 1, Mark.O);
+		board.setField(0, 1, Mark.O);
+		board.setField(1, 0, Mark.O);
+		board.setField(1, 0, Mark.O);
+		board.setField(1, 1, Mark.O);
+		assertFalse(board.isFull());
+		board.setField(1, 1, Mark.O);
+		assertTrue(board.isFull());
+		assertTrue(board.hasWinner());
+		assertTrue(board.gameOver());
+	}
+	
+	@Test
+	public void testDeepCopy() {
+		Board dc = new Board();
+		board.setField(1, 0, Mark.O);
+		assertNotEquals(board.getField(1, 0, 0), dc.getField(1, 0, 0));
+		dc = board.deepCopy();
+		assertEquals(board.getField(1, 0, 0), dc.getField(1, 0, 0));
+	}
+	
+	@Test
 	public void testHasRow() {
 		board.setField(1, 0, Mark.O);
 		board.setField(2, 0, Mark.O);
 		board.setField(3, 0, Mark.O);
 		assertFalse(board.hasRow(Mark.O));
+		assertFalse(board.hasWinner());
+		assertFalse(board.isWinner(Mark.O));
 		board.setField(0, 0, Mark.O);
 		assertTrue(board.hasRow(Mark.O));
+		assertTrue(board.hasWinner());
+		assertTrue(board.isWinner(Mark.O));
 	}
 	@Test
 	public void testHasCol() {

@@ -26,13 +26,13 @@ public class TUI implements Observer {
 		// to be centered on top of its board
 		for(int i = 0; i < brd.getDIM(); i++) {
 			for(int j = 0; j < (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2; j++) {
-					graphicBoard = graphicBoard + " ";
+					graphicBoard += " ";
 				}
-			graphicBoard = graphicBoard + "layer " + i;
+			graphicBoard += "layer " + i;
 			for(int j = 0; j < (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2; j++) {
-					graphicBoard = graphicBoard + " ";
+					graphicBoard += " ";
 				}
-			graphicBoard = graphicBoard + "  ";	
+			graphicBoard += "  ";	
 			}
 		graphicBoard += "\n";
 		return graphicBoard;
@@ -42,21 +42,21 @@ public class TUI implements Observer {
 		for(int k = 0; k < brd.getDIM(); k++) {
 			for(int i = 0; i < brd.getDIM(); i++) {
 				for(int j = 0; j < brd.getDIM(); j++) {
-						graphicBoard = graphicBoard + "+---";
+						graphicBoard += "+---";
 					}
-				graphicBoard = graphicBoard + "+  ";
+				graphicBoard += "+  ";
 				}
-				graphicBoard = graphicBoard + "\n";
+				graphicBoard += "\n";
 				for(int i = 0; i < brd.getDIM(); i++) {
 					for(int j = 0; j < brd.getDIM(); j++) {
-						graphicBoard = graphicBoard + "|" + fieldToString(c,r,h);
+						graphicBoard += "|" + fieldToString(c,r,h);
 						c++;
 					}
 				h++;
 				c = 0;
-				graphicBoard = graphicBoard + "|  "; 
+				graphicBoard += "|  "; 
 			}
-			graphicBoard = graphicBoard + "\n";
+			graphicBoard += "\n";
 			h = 0;
 			r++;
 		}
@@ -66,11 +66,11 @@ public class TUI implements Observer {
 	public String lastLine(String graphicBoard, Board brd) {
 		for(int i = 0; i < brd.getDIM(); i++) {
 			for(int j = 0; j < brd.getDIM(); j++) {
-				graphicBoard = graphicBoard + "+---";
+				graphicBoard += "+---";
 			}
-			graphicBoard = graphicBoard + "+  ";
+			graphicBoard += "+  ";
 		}
-		graphicBoard = graphicBoard + "\n";
+		graphicBoard += "\n";
 		return graphicBoard;
 	}
 	
