@@ -8,7 +8,6 @@ import org.junit.Test;
 import model.Board;
 import model.Mark;
 import view.TUI;
-
 public class BoardTest {
 	private Board board;
 	@Before
@@ -18,7 +17,6 @@ public class BoardTest {
 	
 	@Test
 	public void testHasRow() {
-		TUI tui = new TUI(board);
 		board.setField(1, 0, Mark.O);
 		board.setField(2, 0, Mark.O);
 		board.setField(3, 0, Mark.O);
@@ -28,7 +26,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasCol() {
-		TUI tui = new TUI(board);
 		board.setField(0, 1, Mark.O);
 		board.setField(0, 2, Mark.O);
 		board.setField(0, 3, Mark.O);
@@ -38,7 +35,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasHeight() {
-		TUI tui = new TUI(board);
 		board.setField(0, 0, Mark.O);
 		board.setField(0, 0, Mark.O);
 		board.setField(0, 0, Mark.O);
@@ -48,7 +44,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasRowColumn() {
-		TUI tui = new TUI(board);
 		board.setField(1, 1, Mark.O);
 		board.setField(2, 2, Mark.O);
 		board.setField(3, 3, Mark.O);
@@ -65,7 +60,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasRowHeight() {
-		TUI tui = new TUI(board);
 		board.setField(1, 2, Mark.O);
 		board.setField(2, 2, Mark.O);
 		board.setField(3, 2, Mark.O);
@@ -94,7 +88,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasColumnHeight() {
-		TUI tui = new TUI(board);
 		board.setField(3, 1, Mark.O);
 		board.setField(3, 2, Mark.O);
 		board.setField(3, 3, Mark.O);
@@ -123,7 +116,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasDiagTopLeft() {
-		TUI tui = new TUI(board);
 		board.setField(0, 0, Mark.O);
 		board.setField(1, 1, Mark.O);
 		board.setField(2, 2, Mark.O);
@@ -139,7 +131,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasDiagBottomRight() {
-		TUI tui = new TUI(board);
 		board.setField(0, 3, Mark.O);
 		board.setField(1, 2, Mark.O);
 		board.setField(2, 1, Mark.O);
@@ -155,7 +146,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasDiagBottomLeft() {
-		TUI tui = new TUI(board);
 		board.setField(3, 0, Mark.O);
 		board.setField(2, 1, Mark.O);
 		board.setField(1, 2, Mark.O);
@@ -171,7 +161,6 @@ public class BoardTest {
 	}
 	@Test
 	public void testHasDiagTopRight() {
-		TUI tui = new TUI(board);
 		board.setField(0, 0, Mark.O);
 		board.setField(1, 1, Mark.O);
 		board.setField(2, 2, Mark.O);

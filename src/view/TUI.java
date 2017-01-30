@@ -12,6 +12,7 @@ public class TUI implements Observer {
 	public static final String EMPTY = "   ";
 	public static final String ZERO = " O ";
 	public static final String CROSS = " X ";
+	public final int layerLength = "layer  ".length();
 
 	public TUI(Board b) {
 		board = b;
@@ -19,13 +20,7 @@ public class TUI implements Observer {
 		graphicBoard = boardToString(board);
 	}
 
-	public String boardToString(Board brd) {
-		int h = 0; //height
-		int r = 0; //row
-		int c = 0; //column
-		int l = 0; //layer
-		final int layerLength = "layer  ".length();
-		graphicBoard = "";
+	public String drawHeaders(String graphicBoard, Board brd) {
 		// HACK: (int) ((3 * brd.getDIM() + brd.getDIM() + 1) - layerLength)/2 calculates how many 
 		// spaces does layer i need to its left and its right for it 
 		// to be centered on top of its board
@@ -39,7 +34,11 @@ public class TUI implements Observer {
 				}
 			graphicBoard = graphicBoard + "  ";	
 			}
-		graphicBoard = graphicBoard + "\n";
+		graphicBoard += "\n";
+		return graphicBoard;
+	}
+	
+	public String drawRows(String graphicBoard, Board brd, int c, int r, int h) {
 		for(int k = 0; k < brd.getDIM(); k++) {
 			for(int i = 0; i < brd.getDIM(); i++) {
 				for(int j = 0; j < brd.getDIM(); j++) {
@@ -61,6 +60,10 @@ public class TUI implements Observer {
 			h = 0;
 			r++;
 		}
+		return graphicBoard;
+	}
+	
+	public String lastLine(String graphicBoard, Board brd) {
 		for(int i = 0; i < brd.getDIM(); i++) {
 			for(int j = 0; j < brd.getDIM(); j++) {
 				graphicBoard = graphicBoard + "+---";
@@ -68,6 +71,17 @@ public class TUI implements Observer {
 			graphicBoard = graphicBoard + "+  ";
 		}
 		graphicBoard = graphicBoard + "\n";
+		return graphicBoard;
+	}
+	
+	public String boardToString(Board brd) {
+		int h = 0; //height
+		int r = 0; //row
+		int c = 0; //column
+		graphicBoard = "";
+		graphicBoard = drawHeaders(graphicBoard, brd);
+		graphicBoard = drawRows(graphicBoard, brd, c, r, h);
+		graphicBoard = lastLine(graphicBoard, brd);
 		return graphicBoard;
 	}
 
