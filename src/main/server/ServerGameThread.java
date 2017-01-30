@@ -11,7 +11,7 @@ import model.Mark;
  * Class for checking moves sent by clients and making those moves on
  * the server side model of the board.
  * 
- * @author Dré van Oorschot, Andrei Raureanu
+ * @author DrÃ© van Oorschot, Andrei Raureanu
  * @version 1.0
  *
  */
@@ -216,7 +216,7 @@ public class ServerGameThread extends Thread {
 	/**
 	 * Returns player 2 of the game.
 	 * @return player 2
-	 * @return
+	 * 
 	 */
 	//@pure
 	public ClientThread getClientThread2() {

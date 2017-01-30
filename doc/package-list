@@ -1,2 +1,12 @@
+controller
+controller.players
+controller.strategies
+exceptions
+exceptions.generalErrors
+exceptions.serverErrors
+main
+main.client
 main.server
 model
+test
+view

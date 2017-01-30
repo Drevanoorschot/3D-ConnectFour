@@ -5,7 +5,7 @@ import java.util.Observable;
  * 
  * Class for maintaing the state of the Board.
  * 
- * @author Dré van Oorschot, Andrei Raureanu
+ * @author DrÃ© van Oorschot, Andrei Raureanu
  * 
  * @version 1.0
  */
