@@ -26,7 +26,6 @@ public class ClientThread extends Thread {
 	private PrintWriter writer;
 	private Mark mark;
 	private Integer[] moveBuffer;
-
 	private ServerGameThread gameThread;
 
 	public ClientThread(Socket s, Server svr) throws IOException {
