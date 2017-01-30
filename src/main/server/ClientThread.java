@@ -15,7 +15,12 @@ import exceptions.serverErrors.IllegalMethodUseException;
 import exceptions.serverErrors.UserAlreadyConnectedException;
 import main.Protocol;
 import model.Mark;
-
+/**
+ * Class for handling Client requests to the server and functioning
+ * as a player in the gameThreads of the server.
+ * @author Dré van Oorschot, Andrei Raureanu
+ * @version 1.0
+ */
 public class ClientThread extends Thread {
 	private Socket socket;
 	private InputStream input;
@@ -27,7 +32,10 @@ public class ClientThread extends Thread {
 	private Mark mark;
 	private Integer[] moveBuffer;
 	private ServerGameThread gameThread;
-
+	//@private invariant socket != null;
+	//@private invariant input != null;
+	//@private invariant output != null;
+	//@private invariant server != null;
 	public ClientThread(Socket s, Server svr) throws IOException {
 		socket = s;
 		input = socket.getInputStream();
@@ -35,7 +43,6 @@ public class ClientThread extends Thread {
 		server = svr;
 		moveBuffer = null;
 	}
-
 	@Override
 	public void run() {
 		reader = new BufferedReader(new InputStreamReader(input));
