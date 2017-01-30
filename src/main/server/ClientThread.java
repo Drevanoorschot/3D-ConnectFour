@@ -230,6 +230,7 @@ public class ClientThread extends Thread {
 	 */
 	//@pure
 	public void writePlayersAll() {
+		System.out.println(this.getName() + " requested player list");
 		String players = Protocol.RES_PLAYERS_ALL;
 		for (ClientThread ct : server.getConnectedClients()) {
 			players = players + " " + ct.getClientName();

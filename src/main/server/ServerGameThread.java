@@ -85,8 +85,11 @@ public class ServerGameThread extends Thread {
 					if (!board.gameOver()) {
 						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1] + " "
 								+ ctNextMove);
+						System.out.println(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1] + " "
+								+ ctNextMove);
 					} else {
 						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1]);
+						System.out.println(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1]);
 					}
 
 				} catch (IllegalMoveException | InterruptedException e) {
