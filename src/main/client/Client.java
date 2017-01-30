@@ -36,6 +36,7 @@ public class Client {
 	private ServerInputHandler serverInputHandler;
 	private Player player;
 	private boolean hasTurn;
+	private boolean running;
 
 	public Client() {
 		terminalReader = new BufferedReader(new InputStreamReader(System.in));
@@ -75,6 +76,7 @@ public class Client {
 			client.serverInputHandler = new ServerInputHandler(client.reader, client);
 			client.serverInputHandler.start();
 			client.handleTerminalInput();
+			client.disconnect();
 		} catch (IOException e) {
 			System.out.println("IO exception in main client");
 		}
@@ -115,7 +117,7 @@ public class Client {
 	}
 
 	public void handleTerminalInput() throws IOException {
-		boolean running = true;
+		running = true;
 		while (running) {
 			while (!hasTurn) {
 				if (terminalReader.ready()) {
@@ -165,5 +167,9 @@ public class Client {
 
 	public void setHasTurn(boolean hasTurn) {
 		this.hasTurn = hasTurn;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 }

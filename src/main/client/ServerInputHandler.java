@@ -29,41 +29,46 @@ public class ServerInputHandler extends Thread {
 
 		while (running) {
 			try {
-				if (input.ready()) {
-					String rawText = input.readLine();
-					String[] parsedText = rawText.split(" ");
-					if (parsedText.length >= 4 && rawText.startsWith(Protocol.START)) {
-						if (parsedText[2].equals(client.getName())) {
-							opponent = new OnlinePlayer(Mark.X, parsedText[3]);
-							gameThread = new Game(client.getPlayer(), opponent, false);
-							gameThread.setClient(client);
-							client.setHasTurn(true);
-							gameThread.start();
-						} else {
-							opponent = new OnlinePlayer(Mark.X, parsedText[2]);
-							gameThread = new Game(opponent, client.getPlayer(), false);
-							gameThread.setClient(client);
-							gameThread.start();
-						}
-					} else if (parsedText.length >= 4 && rawText.startsWith(Protocol.SERVER_MOVE)) {
-						if (parsedText[2].equals(opponent.getName())) {
-							int[] move = new int[2];
-							move[0] = Integer.parseInt(parsedText[3]);
-							move[1] = Integer.parseInt(parsedText[4]);
-							opponent.setMoveBuffer(move);
-							client.setHasTurn(true);
-						} else {
-							client.setHasTurn(false);
-						}
-					} else if (rawText.startsWith(Protocol.END_WINNER) || rawText.startsWith(Protocol.END_DRAW)) {
-						//do nothing, client is in same state so knows game is over.
+				String rawText = input.readLine();
+				if (rawText == null) {
+					throw new IOException();
+				}
+				String[] parsedText = rawText.split(" ");
+				if (parsedText.length >= 4 && rawText.startsWith(Protocol.START)) {
+					if (parsedText[2].equals(client.getName())) {
+						opponent = new OnlinePlayer(Mark.X, parsedText[3]);
+						gameThread = new Game(client.getPlayer(), opponent, false);
+						gameThread.setClient(client);
+						client.setHasTurn(true);
+						gameThread.start();
+					} else {
+						opponent = new OnlinePlayer(Mark.X, parsedText[2]);
+						gameThread = new Game(opponent, client.getPlayer(), false);
+						gameThread.setClient(client);
+						gameThread.start();
 					}
-					else {
-						System.out.println(rawText);
+				} else if (parsedText.length >= 4 && rawText.startsWith(Protocol.SERVER_MOVE)) {
+					if (parsedText[2].equals(opponent.getName())) {
+						int[] move = new int[2];
+						move[0] = Integer.parseInt(parsedText[3]);
+						move[1] = Integer.parseInt(parsedText[4]);
+						opponent.setMoveBuffer(move);
+						client.setHasTurn(true);
+					} else {
+						client.setHasTurn(false);
 					}
+				} else if (rawText.startsWith(Protocol.END_WINNER) || rawText.startsWith(Protocol.END_DRAW)) {
+					// do nothing, client is in same state so knows game is
+					// over.
+				} else {
+					System.out.println(rawText);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				running = false;
+				System.out.println("server disconnected, closing down...");
+				client.setRunning(false);
+				running = false;
+				client.setHasTurn(true);
 			}
 		}
 
