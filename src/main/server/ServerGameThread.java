@@ -154,7 +154,7 @@ public class ServerGameThread extends Thread {
 	public Integer[] makeMove(ClientThread ct)
 			throws IllegalMoveException, InterruptedException, PlayerDisconnectException {
 		while (ct.getMoveBuffer() == null && !disconnect) {
-			sleep(1);
+			sleep(100);
 		}
 		if (disconnect) {
 			throw new PlayerDisconnectException();

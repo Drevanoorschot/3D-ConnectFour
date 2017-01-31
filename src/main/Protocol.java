@@ -53,7 +53,7 @@ public interface Protocol {
     /**
      * Used to confirm connection. Can also contain server-supported extensions.
      */
-    public static final String CONFIRM = "CONFIRM ";
+    public static final String CONFIRM = "CONFIRM";
 
     /**
      * Inform client game will start.

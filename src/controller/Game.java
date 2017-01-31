@@ -69,7 +69,7 @@ public class Game extends Thread {
 			OnlinePlayer onlinePlayer = (OnlinePlayer) player;
 			System.out.println("Waiting for opponents move...");
 			while (onlinePlayer.getMoveBuffer() == -1) {
-				sleep(1);
+				sleep(100);
 			}
 		}
 		int[] coords = player.determineMove();

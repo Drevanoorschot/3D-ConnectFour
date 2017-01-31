@@ -55,7 +55,7 @@ public class ServerInputHandler extends Thread {
 					}
 				} else if (rawText.startsWith(Protocol.END_WINNER) 
 						|| rawText.startsWith(Protocol.END_DRAW)) {
-					System.out.println("");
+					client.setHasTurn(false);
 					// do nothing, client is in same state so knows game is
 					// over.
 				} else {
