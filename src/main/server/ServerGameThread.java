@@ -41,7 +41,7 @@ public class ServerGameThread extends Thread {
 	 */
 	private boolean disconnect;
 	/**
-	 * Indicates which player has disconnected
+	 * Indicates which player has disconnected.
 	 */
 	private ClientThread disconnectedThread;
 	/**
@@ -72,7 +72,8 @@ public class ServerGameThread extends Thread {
 	 */
 	public void run() {
 		System.out.println(toString() + " started");
-		broadcast(Protocol.START + " " + clientThread1.getClientName() + " " + clientThread2.getClientName());
+		broadcast(Protocol.START + " " + clientThread1.getClientName()
+			+ " " + clientThread2.getClientName());
 		while (!board.gameOver() && !disconnect) {
 			boolean moveMade = false;
 			while (!moveMade) {
@@ -83,13 +84,15 @@ public class ServerGameThread extends Thread {
 					turn++;
 					String ctNextMove = this.determineTurn().getClientName();
 					if (!board.gameOver()) {
-						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1] + " "
-								+ ctNextMove);
-						System.out.println(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1] + " "
-								+ ctNextMove);
+						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " 
+								+ coords[0] + " " + coords[1] + " " + ctNextMove);
+						System.out.println(Protocol.SERVER_MOVE + " " + ctMadeMove + " " 
+								+ coords[0] + " " + coords[1] + " " + ctNextMove);
 					} else {
-						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1]);
-						System.out.println(Protocol.SERVER_MOVE + " " + ctMadeMove + " " + coords[0] + " " + coords[1]);
+						broadcast(Protocol.SERVER_MOVE + " " + ctMadeMove + " " 
+								+ coords[0] + " " + coords[1]);
+						System.out.println(Protocol.SERVER_MOVE + " " 
+								+ ctMadeMove + " " + coords[0] + " " + coords[1]);
 					}
 
 				} catch (IllegalMoveException | InterruptedException e) {
@@ -98,10 +101,12 @@ public class ServerGameThread extends Thread {
 				} catch (PlayerDisconnectException e) {
 					if (disconnectedThread == clientThread1) {
 						broadcast(Protocol.END_WINNER + " " + clientThread2.getClientName());
-						System.out.println(toString() + " is won by " + clientThread2.getClientName());
+						System.out.println(toString() + " is won by " 
+								+ clientThread2.getClientName());
 					} else {
 						broadcast(Protocol.END_WINNER + " " + clientThread1.getClientName());
-						System.out.println(toString() + " is won by " + clientThread1.getClientName());
+						System.out.println(toString() + " is won by " 
+								+ clientThread1.getClientName());
 					}
 				}
 			}

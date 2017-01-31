@@ -90,7 +90,8 @@ public class ClientThread extends Thread {
 					disconnect();
 				}
 			} catch (IOException e) {
-				System.out.println("IO - exception in run. Unexpected disconnect by" + this.getName()
+				System.out.println(
+						"IO - exception in run. Unexpected disconnect by" + this.getName()
 						+ ".\n Terminating ClientThread...");
 				try {
 					disconnect();
@@ -150,7 +151,8 @@ public class ClientThread extends Thread {
 	}
 	/**
 	 * Disconnects the current ClientThread, which means taking the <tt>ClientThread</tt>
-	 * out of the connected clients list of the server and sending a message to the client it disconnected
+	 * out of the connected clients list of the server and sending a message to the client 
+	 * it disconnected.
 	 * 
 	 * @throws IllegalMethodUseException thrown when the <tt>ClientThread</tt> does not
 	 * occur in the connected clients list.
@@ -298,7 +300,7 @@ public class ClientThread extends Thread {
 		this.mark = mark;
 	}
 	/**
-	 * Set the gameThread for this <tt>ClientThread</tt> 
+	 * Set the gameThread for this <tt>ClientThread</tt>.
 	 * @param gameThread
 	 */
 	//@ensures gameThread.equals(getGameThread());

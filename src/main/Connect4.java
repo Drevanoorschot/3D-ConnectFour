@@ -50,4 +50,4 @@ public class Connect4 {
 		System.exit(0);
 	}
 
-	}
+}

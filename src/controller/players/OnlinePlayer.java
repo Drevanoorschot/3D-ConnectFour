@@ -14,7 +14,7 @@ public class OnlinePlayer extends Player {
 
 	@Override
 	public int[] determineMove() {
-			return moveBuffer;
+		return moveBuffer;
 	}
 
 	public void setMoveBuffer(int[] moveBuffer) {
