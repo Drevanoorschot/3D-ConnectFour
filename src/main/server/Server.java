@@ -3,7 +3,7 @@ package main.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import exceptions.InvalidInputException;
@@ -15,8 +15,8 @@ public class Server {
 	private List<ClientThread> readyClients;
 	
 	public Server() {
-		connectedClients = new ArrayList<ClientThread>();
-		readyClients = new ArrayList<ClientThread>();
+		connectedClients = new LinkedList<ClientThread>();
+		readyClients = new LinkedList<ClientThread>();
 	}
 	//@pure
 	public List<ClientThread> getConnectedClients() {
