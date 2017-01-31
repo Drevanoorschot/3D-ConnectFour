@@ -21,7 +21,8 @@ import model.Mark;
 public class Client {
 
 	public static final String HELP = "HELP";
-	public static final String GIVEHELP = "List of commands:\n" + "DISCONNECT: disconnect from server and exit\n"
+	public static final String GIVEHELP = 
+			"List of commands:\n" + "DISCONNECT: disconnect from server and exit\n"
 			+ "PLAYERS ALL: get list of players that are connected to server\n"
 			+ "GAME READY: notify server you are ready to play a game\n"
 			+ "GAME UNREADY: notify server that you are not ready anymore to play a game\n";
@@ -53,8 +54,10 @@ public class Client {
 				client.getConnectionInfo();
 				client.getPlayerInfo();
 				client.sock = new Socket(client.ipAddress, client.port);
-				client.reader = new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
-				client.writer = new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
+				client.reader = 
+						new BufferedReader(new InputStreamReader(client.sock.getInputStream()));
+				client.writer = 
+						new PrintWriter(new OutputStreamWriter(client.sock.getOutputStream()));
 				client.connect();
 				if (!client.reader.readLine().startsWith(Protocol.CONFIRM)) {
 					throw new UserAlreadyConnectedException();
@@ -63,8 +66,10 @@ public class Client {
 					infoReady = true;
 				}
 
-			} catch (IOException | NumberFormatException e){
-				System.out.println("An IO-Exception/NumberFormatException Occured, please enter information again. " + "Possible causes:\n"
+			} catch (IOException | NumberFormatException e) {
+				System.out.println("An IO-Exception/NumberFormatException Occured, "
+						+ "please enter information again. " 
+						+ "Possible causes:\n"
 						+ "- incorrect ip address\n" + "- incorrect port number\n");
 			} catch (UserAlreadyConnectedException e) {
 				System.out.println(e.getMessage() + ". Please choose a different username");
@@ -102,14 +107,16 @@ public class Client {
 		if (playChoice.equals("2")) {
 			player = new HumanNetworkPlayer(Mark.O, name, terminalReader);
 		} else if (playChoice.equals("1")) {
-			System.out.println("Do you wish to play with a fast naive AI (1) or slow smart AI (2)?");
+			System.out.println(
+					"Do you wish to play with a fast naive AI (1) or slow smart AI (2)?");
 			playChoice = terminalReader.readLine();
 			if (playChoice.equals("1")) {
 				player = new ComputerPlayer(Mark.O, new NaiveStrategy());
 			} else if (playChoice.equals("2")) {
 				player = new ComputerPlayer(Mark.O, new SmartStrategy());
 			} else {
-				throw new InvalidInputException("Invalid input, please provide a 1 or a 2 as answer");
+				throw new InvalidInputException(
+						"Invalid input, please provide a 1 or a 2 as answer");
 			}
 		} else {
 			throw new InvalidInputException("Invalid input, please provide a 1 or a 2 as answer");

@@ -1,13 +1,15 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import model.Board;
 import model.Mark;
-import view.TUI;
 public class BoardTest {
 	private Board board;
 	@Before
@@ -17,7 +19,7 @@ public class BoardTest {
 	
 	@Test
 	public void testIsFull() {
-		board.setDIM(2);
+		Board.setDIM(2);
 		board.setField(0, 0, Mark.O);
 		board.setField(0, 0, Mark.O);
 		board.setField(0, 1, Mark.O);

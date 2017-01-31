@@ -64,8 +64,10 @@ public interface Protocol {
 
     /**
      * Broadcasted message announcing current move and future move (if applicable).
-     * Example with future move: <code>GAME MOVE bob 2 0 hans</code> (Current move by bob at (2,0), next is hans).
-     * Example without: <code>GAME MOVE hans 2 2</code> (Current move by hans at (2,2), this was final turn).
+     * Example with future move: <code>GAME MOVE bob 2 0 hans</code> 
+     * (Current move by bob at (2,0), next is hans).
+     * Example without: <code>GAME MOVE hans 2 2</code> 
+     * (Current move by hans at (2,2), this was final turn).
      */
     public static final String SERVER_MOVE = "GAME MOVE";
 
@@ -83,14 +85,16 @@ public interface Protocol {
     /**
      * Result of player list query.
      * LAST ARGUMENTS CAN BE MULTIPLE NAMES.
-     * Example: <code>PLAYERS ALL hans peter dirk tessa</code>: All players in this server are these.
+     * Example: <code>PLAYERS ALL hans peter dirk tessa</code>: 
+     * All players in this server are these.
      */
     public static final String RES_PLAYERS_ALL = "PLAYERS ALL";
 
     /**
      * Result of player list query with extension criteria.
      * LAST ARGUMENT CAN BE MULTIPLE NAMES.
-     * Example: <code>PLAYERS 0 hans</code>: Of people on the server, only hans supports extension 0.
+     * Example: <code>PLAYERS 0 hans</code>: Of people on the server, 
+     * only hans supports extension 0.
      */
     public static final String RES_PLAYERS_EXT =  "PLAYERS %s %s";
 

@@ -2,10 +2,6 @@ package main.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PipedWriter;
-import java.net.Socket;
 
 import controller.Game;
 import controller.players.OnlinePlayer;
@@ -57,7 +53,9 @@ public class ServerInputHandler extends Thread {
 					} else {
 						client.setHasTurn(false);
 					}
-				} else if (rawText.startsWith(Protocol.END_WINNER) || rawText.startsWith(Protocol.END_DRAW)) {
+				} else if (rawText.startsWith(Protocol.END_WINNER) 
+						|| rawText.startsWith(Protocol.END_DRAW)) {
+					System.out.println("");
 					// do nothing, client is in same state so knows game is
 					// over.
 				} else {
